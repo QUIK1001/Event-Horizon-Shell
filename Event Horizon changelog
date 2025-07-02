@@ -1,0 +1,28 @@
+v1.0.0 Event Horizon
+first version
+
+v1.0.1 Event Horizon
+second version
++shell
+
+v1.0.2
+third version
++mkdir (shell)
++rmdir (shell)
+
+v1.0.3 Event Horizon 
+fourth version
++time (shell)
++perf (shell)
+Requirements for v1.0.3+: psutil library
+
+v1.0.4 Event Horizon
+fifth version
++timer
++check updates
+Requirements for v1.0.4+: packaging, requests and psutil libraries
+
+v1.0.4a Event Horizon
+fifth version
++colors
+Requirements for v1.0.4a+: packaging, requests, colorama and psutil libraries
