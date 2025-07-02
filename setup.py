@@ -1,6 +1,10 @@
 from setuptools import setup
-from pathlib import Path
-long_description = (Path(__file__).parent / "README.md").read_text(encoding="utf-8")
+import os
+if os.path.exists("README.md"):
+    with open("README.md", "r", encoding="utf-8") as f:
+        long_description = f.read()
+else:
+    long_description = "Event Horizon CLI shell"
 
 setup(
     name="event-horizon-quik",
@@ -8,7 +12,7 @@ setup(
     author="Your Name",
     description="Cosmic CLI shell with Python",
     long_description=long_description,
-    long_description_content_type="text/markdown", 
+    long_description_content_type="text/markdown",
     py_modules=["v1_0_4a"],
     install_requires=[
         "colorama",
