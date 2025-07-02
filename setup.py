@@ -7,9 +7,9 @@ else:
     long_description = "Event Horizon CLI shell"
 
 setup(
-    name="event-horizon-quik",
-    version="1.0.5",
-    author="Your Name",
+    name="EH_shell",
+    version="1_0_4a",
+    author="QUIK",
     description="Cosmic CLI shell with Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
