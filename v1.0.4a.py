@@ -6,7 +6,7 @@ import psutil
 from datetime import datetime
 from packaging import version
 import requests
-from colorama import Fore, Back, Style, init
+from colorama import Fore, Style
 shell_version="v1.0.4a"
 github_lastest_update="https://raw.githubusercontent.com/QUIK1001/Event-Horizon/main/check_update"
 def check_updates():
@@ -117,7 +117,7 @@ def shell():
         if cmd=="help":
             print("⣦help-show help")
             print("⣦clear-clear screen")
-            print("⣦info-OS info")
+            print("⣦info-shell info")
             print("⣦exit-exit to menu\n")
             print("⣦mkdir-create folder")
             print("⣦rmdir-remove folder")
