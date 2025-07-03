@@ -116,7 +116,7 @@ def shell():
         if cmd=="help":
             print("⣦help-show help")
             print("⣦clear-clear screen")
-            print("⣦info-OS info")
+            print("⣦info-shell info")
             print("⣦exit-exit to menu\n")
             print("⣦mkdir-create folder")
             print("⣦rmdir-remove folder")
@@ -214,3 +214,4 @@ def menu():
             time.sleep(1)
             clear_screen()
 menu()
+#Hi GitHub 
