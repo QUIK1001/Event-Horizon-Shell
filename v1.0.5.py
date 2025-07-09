@@ -255,9 +255,7 @@ def shell():
                 while True:
                     clear_screen()
                     print(
-                        Fore.RED + f"CPU: {
-                            psutil.cpu_percent()}% \nRAM: {
-                            psutil.virtual_memory().percent}%" + Style.RESET_ALL)
+                        Fore.RED + f"CPU:{psutil.cpu_percent()}% \nRAM: {      psutil.virtual_memory().percent}%" + Style.RESET_ALL)
                     time.sleep(1)
             except KeyboardInterrupt:
                 print(Fore.GREEN + "\n⣦ Monitor stopped." + Style.RESET_ALL)
