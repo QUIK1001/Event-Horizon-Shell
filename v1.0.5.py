@@ -119,7 +119,7 @@ def calc():
         except ValueError:
             print(Fore.RED + "⣏!⣽ Numbers only!" + Style.RESET_ALL)
             continue
-        if input("⣦Exit? Y/N> ") == "Y":
+        if input("⣦Exit? Y/N> ").upper() == "Y":
             clear_screen()
             break
 def echo():
