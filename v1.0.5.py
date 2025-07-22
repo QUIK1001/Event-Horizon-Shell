@@ -262,7 +262,6 @@ def shell():
                 clear_screen()
                 print("⣦Event Horizon shell\n")
 
-
 def timer():
     timer_time = int(input("enter clock time in seconds> "))
     print(timer_time)
