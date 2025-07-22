@@ -119,7 +119,7 @@ def calc():
         except ValueError:
             print(Fore.RED + "⣏!⣽ Numbers only!" + Style.RESET_ALL)
             continue
-        if input("⣦Exit? Y/N> ") == "Y":
+        if input("⣦Exit? Y/N> ").upper() == "Y":
             clear_screen()
             break
 def echo():
@@ -255,15 +255,12 @@ def shell():
                 while True:
                     clear_screen()
                     print(
-                        Fore.RED + f"CPU: {
-                            psutil.cpu_percent()}% \nRAM: {
-                            psutil.virtual_memory().percent}%" + Style.RESET_ALL)
+                        Fore.RED + f"CPU:{psutil.cpu_percent()}% \nRAM: {      psutil.virtual_memory().percent}%" + Style.RESET_ALL)
                     time.sleep(1)
             except KeyboardInterrupt:
                 print(Fore.GREEN + "\n⣦ Monitor stopped." + Style.RESET_ALL)
                 clear_screen()
                 print("⣦Event Horizon shell\n")
-
 
 def timer():
     timer_time = int(input("enter clock time in seconds> "))

@@ -26,3 +26,9 @@ v1.0.4a Event Horizon
 fifth version (02.07.2025)
 +colors
 Requirements for v1.0.4a+: packaging, requests, colorama and psutil libraries
+
+v1.0.5 Event Horizon
+sixth version (03.07.2025)
++new loading screen 
+(Pylint: 9.01/10)
+Requirements for v1.0.5+: packaging, requests, colorama and psutil libraries
