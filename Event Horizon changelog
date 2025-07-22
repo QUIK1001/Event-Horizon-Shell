@@ -34,7 +34,7 @@ sixth version (03.07.2025)
 Requirements for v1.0.5+: packaging, requests, colorama and psutil libraries
 
 v1.0.6 Event Horizon
-sixth version (22.07.2025)
+seventh version (22.07.2025)
 +check internet speed
 +rmdir /all
 (Pylint: 9.07/10)
