@@ -13,7 +13,7 @@
   - `timer`: timer
   - `check updates`: check updates
   - `Сheck internet speed`: Сheck internet speed
-cool loading screen :)
+ - cool loading screen :)
 
 # Requirements for v1.0.6+:
 ## packaging, requests, colorama and psutil libraries!
