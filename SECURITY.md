@@ -4,6 +4,6 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| >1.0.5  | :white_check_mark: |
-| <1.0.4   | :x:                |
+| >1.0.6  | :white_check_mark: |
+| <1.0.5   | :x:                |
 

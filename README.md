@@ -12,8 +12,9 @@
     - Resource monitor (CPU/RAM via psutil)
   - `timer`: timer
   - `check updates`: check updates
-cool loading screen :)
+  - `Сheck internet speed`: Сheck internet speed
+ - cool loading screen :)
 
-# Requirements for v1.0.5+:
+# Requirements for v1.0.6+:
 ## packaging, requests, colorama and psutil libraries!
 ### contact: belov0507artem@gmail.com

@@ -8,10 +8,10 @@ import requests
 from colorama import Back, Fore, Style
 from packaging import version
 shell_version = "v1.0.5"
-github_lastest_update = "https://raw.githubusercontent.com/QUIK1001/Event-Horizon/main/check_update"
+github_latest_update = "https://raw.githubusercontent.com/QUIK1001/Event-Horizon/main/check_update"
 def check_updates():
     try:
-        response = requests.get(github_lastest_update, timeout=3)
+        response = requests.get(github_latest_update, timeout=3)
         response.raise_for_status()
         latest_version = response.text.strip()
         if version.parse(latest_version) > version.parse(shell_version):
