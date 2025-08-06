@@ -54,7 +54,7 @@ jobs:
       - name: Push changes
         if: always()
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "QUIK1001"
+          git config --global user.email "belov0507artem@gmail.com"
           git pull --rebase
           git push || echo "No changes to push"
