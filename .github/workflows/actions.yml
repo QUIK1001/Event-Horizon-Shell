@@ -1,4 +1,4 @@
-name: actions
+name: CI Lint and Format
 
 on: [push, pull_request]
 
@@ -6,59 +6,66 @@ jobs:
   lint_and_format:
     runs-on: windows-latest
     steps:
+      # 1. Checkout code
       - uses: actions/checkout@v4
       
-
-      - name: Setting up a Git user
+      # 2. Set Git identity (для коммитов)
+      - name: Configure Git
         run: |
           git config --global user.name "QUIK1001"
           git config --global user.email "belov0507artem@gmail.com"
 
-      - name: Installing Python
+      # 3. Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           architecture: x64
 
-      - name: Installing dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install black==23.12.1 isort==5.13.2 flake8==6.1.0 pylint==3.0.3 mypy==1.7.1
+      # 4. Install dependencies (без лишнего обновления pip)
+      - name: Install tools
+        run: pip install black isort flake8 pylint mypy
           
-      - name: Creating configs
+      # 5. Create config files
+      - name: Generate configs
         run: |
-          # .flake8
+          # Flake8 config (игнорируем некоторые ошибки)
           echo "[flake8]" > .flake8
           echo "max-line-length = 88" >> .flake8
           echo "ignore = E203, W291, W503" >> .flake8
           
-          # .isort.cfg
+          # isort config (совместимость с black)
           echo "[settings]" > .isort.cfg
           echo "profile = black" >> .isort.cfg
           echo "lines_after_imports = 2" >> .isort.cfg
           
+      # 6. Autoformat with isort
       - name: Run isort
         run: |
           isort --settings-file .isort.cfg .
           git diff --quiet || (git add . && git commit -m "Apply isort formatting")
           
+      # 7. Autoformat with Black (явно указываем line-length)
       - name: Run Black
         run: |
-          black .
+          black . --line-length 88
           git diff --quiet || (git add . && git commit -m "Apply Black formatting")
           
+      # 8. Lint with flake8 (проверка стиля)
       - name: Run flake8
-        run: flake8 . || echo "Flake8 нашёл проблемы, исправьте вручную"
+        run: flake8 . || echo "Flake8 found issues, please fix them manually"
 
+      # 9. Lint with pylint (проверка качества кода)
       - name: Run pylint
-        run: |
-          pylint --disable=missing-docstring,invalid-name,too-few-public-methods *.py || echo "Pylint нашёл проблемы"
+        run: pylint --disable=missing-docstring,invalid-name,too-few-public-methods *.py || echo "Pylint found issues"
           
+      # 10. Type checking with mypy
       - name: Run mypy
-        run: mypy --strict . || echo "Mypy нашёл проблемы с типами"
+        run: mypy --strict . || echo "Mypy found type issues"
 
-      - name: Отправка изменений (?)
+      # 11. Push changes (если были автоисправления)
+      - name: Push changes
         if: always()
         run: |
           git pull --rebase
-          git push || echo "Нет изменений для отправки"
+          git push || echo "No changes to push"
