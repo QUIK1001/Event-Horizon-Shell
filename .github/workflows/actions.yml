@@ -38,10 +38,9 @@ jobs:
           
           # Pylint config
           echo "[MASTER]" > .pylintrc
-          echo "disable=missing-docstring,invalid-name,too-few-public-methods" >> .pylintrc
+          echo "disable=missing-docstring,invalid-name,too-few-public-methods,too-many-branches,too-many-statements,broad-exception-caught,line-too-long,missing-module-docstring,missing-function-docstring" >> .pylintrc
           echo "ignore=psutil,requests" >> .pylintrc
           echo "max-line-length=88" >> .pylintrc
-          echo "disable=too-many-branches,too-many-statements,broad-exception-caught,line-too-long,missing-module-docstring,missing-function-docstring" >> .pylintrc
           
       - name: Run isort
         run: |
@@ -54,13 +53,13 @@ jobs:
           git diff --quiet || (git add . && git commit -m "Apply Black formatting")
           
       - name: Run flake8
-        run: flake8 . || echo "Flake8: Some style issues remain (non-blocking)"
+        run: flake8 . || echo "Flake8"
 
       - name: Run pylint
-        run: pylint --rcfile=.pylintrc *.py || echo "Pylint: Found some minor issues (non-blocking)"
+        run: pylint --rcfile=.pylintrc *.py || echo "Pylint"
 
       - name: Run mypy
-        run: mypy --strict --ignore-missing-imports . || echo "Mypy: Found some type hints issues (non-blocking)"
+        run: mypy --strict --ignore-missing-imports . || echo "Mypy"
 
       - name: Push changes
         if: always()
