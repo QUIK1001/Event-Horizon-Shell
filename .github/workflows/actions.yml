@@ -1,0 +1,42 @@
+name: Code Quality
+
+on: [push, pull_request]
+
+jobs:
+  lint_and_format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install tools
+        run: pip install pylint black autopep8 isort flake8 mypy
+
+      - name: Run Black
+        run: black --check --diff .
+
+      - name: Run autopep8
+        run: autopep8 --recursive --in-place --aggressive .
+
+      - name: Run isort
+        run: isort .
+
+      - name: Run Pylint
+        run: pylint --disable=missing-docstring,invalid-name *.py
+
+      - name: Run flake8
+        run: flake8 .
+
+      - name: Run mypy
+        run: mypy --strict .
+
+      - name: Commit and push changes
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m ":)" || true
+          git push origin HEAD:main || true
