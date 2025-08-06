@@ -8,53 +8,57 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set up Python
+
+      - name: Setting up a Git user
+        run: |
+          git config --global user.name "QUIK1001"
+          git config --global user.email "belov0507artem@gmail.com"
+
+      - name: Installing Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           architecture: x64
 
-      - name: Install dependencies
+      - name: Installing dependencies
         run: |
           python -m pip install --upgrade pip
           pip install black==23.12.1 isort==5.13.2 flake8==6.1.0 pylint==3.0.3 mypy==1.7.1
-
-      - name: Create config files
+          
+      - name: Creating configs
         run: |
-          # .flake8 config
+          # .flake8
           echo "[flake8]" > .flake8
           echo "max-line-length = 88" >> .flake8
           echo "ignore = E203, W291, W503" >> .flake8
           
-          # .isort.cfg config
+          # .isort.cfg
           echo "[settings]" > .isort.cfg
           echo "profile = black" >> .isort.cfg
           echo "lines_after_imports = 2" >> .isort.cfg
-
+          
       - name: Run isort
         run: |
           isort --settings-file .isort.cfg .
           git diff --quiet || (git add . && git commit -m "Apply isort formatting")
-
+          
       - name: Run Black
         run: |
           black .
           git diff --quiet || (git add . && git commit -m "Apply Black formatting")
-
+          
       - name: Run flake8
-        run: flake8 . || echo "Flake8 found issues, please fix them manually"
+        run: flake8 . || echo "Flake8 нашёл проблемы, исправьте вручную"
 
       - name: Run pylint
         run: |
-          pylint --disable=missing-docstring,invalid-name,too-few-public-methods *.py || echo "Pylint found issues"
-
+          pylint --disable=missing-docstring,invalid-name,too-few-public-methods *.py || echo "Pylint нашёл проблемы"
+          
       - name: Run mypy
-        run: mypy --strict . || echo "Mypy found type issues"
+        run: mypy --strict . || echo "Mypy нашёл проблемы с типами"
 
-      - name: Push changes
+      - name: Отправка изменений (?)
         if: always()
         run: |
-          git config --global user.name "QUIK1001"
-          git config --global user.email "belov0507artem@gmail.com"
           git pull --rebase
-          git push || echo "No changes to push"
+          git push || echo "Нет изменений для отправки"
