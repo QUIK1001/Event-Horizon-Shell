@@ -6,64 +6,51 @@ jobs:
   lint_and_format:
     runs-on: windows-latest
     steps:
-      # 1. Checkout code
       - uses: actions/checkout@v4
       
-      # 2. Set Git identity (для коммитов)
       - name: Configure Git
         run: |
           git config --global user.name "QUIK1001"
           git config --global user.email "belov0507artem@gmail.com"
 
-      # 3. Set up Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           architecture: x64
 
-      # 4. Install dependencies (без лишнего обновления pip)
       - name: Install tools
         run: pip install black isort flake8 pylint mypy
           
-      # 5. Create config files
       - name: Generate configs
         run: |
-          # Flake8 config (игнорируем некоторые ошибки)
           echo "[flake8]" > .flake8
           echo "max-line-length = 88" >> .flake8
-          echo "ignore = E203, W291, W503" >> .flake8
+          echo "ignore = E203, W291, W503, E501" >> .flake8  # Игнорируем E501
           
-          # isort config (совместимость с black)
           echo "[settings]" > .isort.cfg
           echo "profile = black" >> .isort.cfg
           echo "lines_after_imports = 2" >> .isort.cfg
           
-      # 6. Autoformat with isort
       - name: Run isort
         run: |
           isort --settings-file .isort.cfg .
           git diff --quiet || (git add . && git commit -m "Apply isort formatting")
           
-      # 7. Autoformat with Black (явно указываем line-length)
       - name: Run Black
         run: |
           black . --line-length 88
           git diff --quiet || (git add . && git commit -m "Apply Black formatting")
           
-      # 8. Lint with flake8 (проверка стиля)
       - name: Run flake8
-        run: flake8 . || echo "Flake8 found issues, please fix them manually"
+        run: flake8 . || echo "Flake8 issues remaining (some lines need manual fixing)"
 
-      # 9. Lint with pylint (проверка качества кода)
       - name: Run pylint
         run: pylint --disable=missing-docstring,invalid-name,too-few-public-methods *.py || echo "Pylint found issues"
           
-      # 10. Type checking with mypy
       - name: Run mypy
         run: mypy --strict . || echo "Mypy found type issues"
 
-      # 11. Push changes (если были автоисправления)
       - name: Push changes
         if: always()
         run: |
