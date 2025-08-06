@@ -1,14 +1,20 @@
 import os
+import random
 import sys
 import time
-import random
 from datetime import datetime
+
 import psutil
 import requests
 from colorama import Back, Fore, Style
 from packaging import version
+
 shell_version = "v1.0.5"
-github_latest_update = "https://raw.githubusercontent.com/QUIK1001/Event-Horizon/main/check_update"
+github_latest_update = (
+    "https://raw.githubusercontent.com/QUIK1001/Event-Horizon/main/check_update"
+)
+
+
 def check_updates():
     try:
         response = requests.get(github_latest_update, timeout=3)
@@ -16,13 +22,15 @@ def check_updates():
         latest_version = response.text.strip()
         if version.parse(latest_version) > version.parse(shell_version):
             print(
-                Fore.RED +
-                f"Update! {shell_version} < {latest_version}" +
-                Style.RESET_ALL)
+                Fore.RED
+                + f"Update! {shell_version} < {latest_version}"
+                + Style.RESET_ALL
+            )
             print(
-                Fore.CYAN +
-                "Download: https://github.com/QUIK1001/Event-Horizon" +
-                Style.RESET_ALL)
+                Fore.CYAN
+                + "Download: https://github.com/QUIK1001/Event-Horizon"
+                + Style.RESET_ALL
+            )
             return True
         else:
             print(Fore.GREEN + "Actual version" + Style.RESET_ALL)
@@ -30,18 +38,22 @@ def check_updates():
     except requests.exceptions.RequestException as e:
         print(Fore.RED + f"Error connecting: {str(e)}" + Style.RESET_ALL)
         return False
+
+
 def clear_screen():
     os.system("clear" if os.name == "posix" else "cls")
+
+
 def event_horizon():
-    art_symbols = ['-', '\\', '|', '/']
+    art_symbols = ["-", "\\", "|", "/"]
     ascii_art_EH = [
         "             ⣀⣴⣿⣿⣿⣿⣿⣿⣶⣄          ",
-        '            ⣶⣿⣿⡿⠛⠉⠉⠉⠛⢿⣿⣿⣷⣄       ',
+        "            ⣶⣿⣿⡿⠛⠉⠉⠉⠛⢿⣿⣿⣷⣄       ",
         "        ⢀⣴⣿⣿⣿⠋⡀⠀⠀⠀⠀⠀⠀⠙⣿⣿⣿⣿⣦⡀     ",
         "⠀⠀⣀⣰⣶⣿⣿⣿⣿⣿⣿⣀⣀⣀⣀⣀⣀⣰⣰⣶⣿⣿⣿⣿⣿⣿⣷⣦⣤⣀   ",
         " ⠉⠉⠉⠈⠉⠛⠛⠛⠛⣿⣿⡽⣏⠉⠉⠉⠉⠉⣽⣿⠛⠉⠉⠉⠉⠉⠉⠉⠁   ",
         "             ⠉⠻⣷⣦⣄⣀⣠⣴⣾⡿⠃         ",
-        "                 ⠛⠿⠿⠿⠟⠋          "
+        "                 ⠛⠿⠿⠿⠟⠋          ",
     ]
     for step in range(10, 0, -1):
         clear_screen()
@@ -53,20 +65,27 @@ def event_horizon():
     for line in ascii_art_EH:
         print(Back.WHITE + Fore.BLACK + Style.BRIGHT + line + Style.RESET_ALL)
     print(
-        Fore.RED +
-        " " *
-        10 +
-        "Event Horizon\n" +
-        " " *
-        10 +
-        shell_version +
-        Style.RESET_ALL)
+        Fore.RED
+        + " " * 10
+        + "Event Horizon\n"
+        + " " * 10
+        + shell_version
+        + Style.RESET_ALL
+    )
     for i in range(8):
-        sys.stdout.write(Fore.GREEN + '\r' + " " * 10 +
-                         "loading " + art_symbols[i % 4] + Style.RESET_ALL)
+        sys.stdout.write(
+            Fore.GREEN
+            + "\r"
+            + " " * 10
+            + "loading "
+            + art_symbols[i % 4]
+            + Style.RESET_ALL
+        )
         time.sleep(0.5)
     clear_screen()
     print("---=Event Horizon=---")
+
+
 def calc():
     while True:
         try:
@@ -78,42 +97,34 @@ def calc():
                     calc_num1,
                     calc_act,
                     calc_num2,
-                    Fore.GREEN +
-                    "equals> " +
-                    Style.RESET_ALL,
-                    calc_num1 +
-                    calc_num2)
+                    Fore.GREEN + "equals> " + Style.RESET_ALL,
+                    calc_num1 + calc_num2,
+                )
             elif calc_act == "-":
                 print(
                     calc_num1,
                     calc_act,
                     calc_num2,
-                    Fore.GREEN +
-                    "equals> " +
-                    Style.RESET_ALL,
-                    calc_num1 -
-                    calc_num2)
+                    Fore.GREEN + "equals> " + Style.RESET_ALL,
+                    calc_num1 - calc_num2,
+                )
             elif calc_act == "*":
                 print(
                     calc_num1,
                     calc_act,
                     calc_num2,
-                    Fore.GREEN +
-                    "equals> " +
-                    Style.RESET_ALL,
-                    calc_num1 *
-                    calc_num2)
+                    Fore.GREEN + "equals> " + Style.RESET_ALL,
+                    calc_num1 * calc_num2,
+                )
             elif calc_act == "/":
                 if calc_num2 != 0:
                     print(
                         calc_num1,
                         calc_act,
                         calc_num2,
-                        Fore.GREEN +
-                        "equals> " +
-                        Style.RESET_ALL,
-                        calc_num1 /
-                        calc_num2)
+                        Fore.GREEN + "equals> " + Style.RESET_ALL,
+                        calc_num1 / calc_num2,
+                    )
                 else:
                     print(Fore.RED + "⣏!⣽ DIV/0!" + Style.RESET_ALL)
         except ValueError:
@@ -122,6 +133,8 @@ def calc():
         if input("⣦Exit? Y/N> ").upper() == "Y":
             clear_screen()
             break
+
+
 def echo():
     echo_text = input("⣦Enter your text: ")
     print("⣦Your text:", echo_text)
@@ -136,7 +149,7 @@ def ascii_arts():
  > ^ < """,
         """  /|_/|
  =( °w° )=
-  )   (  """
+  )   (  """,
     ]
     ascii_galaxie = [
         """    . * .
@@ -154,7 +167,7 @@ def ascii_arts():
 def os_info():
     clear_screen()
     print(Fore.GREEN + "             ⣀⣴⣿⣿⣿⣿⣿⣿⣶⣄")
-    print('            ⣶⣿⣿⡿⠛⠉⠉⠉⠛⢿⣿⣿⣷⣄')
+    print("            ⣶⣿⣿⡿⠛⠉⠉⠉⠛⢿⣿⣿⣷⣄")
     print("        ⢀⣴⣿⣿⣿⠋⡀⠀⠀⠀⠀⠀⠀⠙⣿⣿⣿⣿⣦⡀")
     print("⠀⠀⣀⣰⣶⣿⣿⣿⣿⣿⣿⣀⣀⣀⣀⣀⣀⣰⣰⣶⣿⣿⣿⣿⣿⣿⣷⣦⣤⣀")
     print(" ⠉⠉⠉⠈⠉⠛⠛⠛⠛⣿⣿⡽⣏⠉⠉⠉⠉⠉⣽⣿⠛⠉⠉⠉⠉⠉⠉⠉⠁")
@@ -178,9 +191,10 @@ def shell():
     clear_screen()
     print("Event Horizon shell")
     print(
-        Fore.GREEN +
-        "⣦ Type 'help' for commands, type 'exit' for exit\n" +
-        Style.RESET_ALL)
+        Fore.GREEN
+        + "⣦ Type 'help' for commands, type 'exit' for exit\n"
+        + Style.RESET_ALL
+    )
     while True:
         cmd = input("#> ")
         if cmd == "help":
@@ -213,19 +227,17 @@ def shell():
             try:
                 os.mkdir(shell_mk_path)
                 print(
-                    Fore.GREEN +
-                    "folder",
+                    Fore.GREEN + "folder",
                     {shell_mkdir},
-                    "created in" +
-                    Style.RESET_ALL,
-                    {shell_par_mkdir})
+                    "created in" + Style.RESET_ALL,
+                    {shell_par_mkdir},
+                )
             except FileExistsError:
                 print(
-                    Fore.RED +
-                    "⣏!⣽",
+                    Fore.RED + "⣏!⣽",
                     {shell_mk_path},
-                    "already exists!" +
-                    Style.RESET_ALL)
+                    "already exists!" + Style.RESET_ALL,
+                )
         elif cmd == "rmdir":
             shell_rm_path = input("Enter folder path to delete: ")
             if not os.path.exists(shell_rm_path):
@@ -234,33 +246,38 @@ def shell():
             else:
                 os.rmdir(shell_rm_path)
                 print(
-                    Fore.GREEN +
-                    "folder",
+                    Fore.GREEN + "folder",
                     {shell_rm_path},
-                    "deleted successfully!" +
-                    Style.RESET_ALL)
+                    "deleted successfully!" + Style.RESET_ALL,
+                )
         elif cmd == "time":
             shell_time = datetime.now()
             shell_for_time = shell_time.strftime(
-                Fore.BLUE + "%Y-%m-%d %H:%M:%S:%MS" + Style.RESET_ALL)
+                Fore.BLUE + "%Y-%m-%d %H:%M:%S:%MS" + Style.RESET_ALL
+            )
             print(shell_for_time)
         elif cmd == "perf":
             clear_screen()
             print(
-                Fore.RED +
-                "⣦ System monitor started. Press Ctrl+C to stop." +
-                Style.RESET_ALL)
+                Fore.RED
+                + "⣦ System monitor started. Press Ctrl+C to stop."
+                + Style.RESET_ALL
+            )
             time.sleep(2.5)
             try:
                 while True:
                     clear_screen()
                     print(
-                        Fore.RED + f"CPU:{psutil.cpu_percent()}% \nRAM: {      psutil.virtual_memory().percent}%" + Style.RESET_ALL)
+                        Fore.RED
+                        + f"CPU:{psutil.cpu_percent()}% \nRAM: {      psutil.virtual_memory().percent}%"
+                        + Style.RESET_ALL
+                    )
                     time.sleep(1)
             except KeyboardInterrupt:
                 print(Fore.GREEN + "\n⣦ Monitor stopped." + Style.RESET_ALL)
                 clear_screen()
                 print("⣦Event Horizon shell\n")
+
 
 def timer():
     timer_time = int(input("enter clock time in seconds> "))
@@ -277,9 +294,10 @@ def menu():
     event_horizon()
     while True:
         print(
-            Style.BRIGHT +
-            "1. calc\n2. echo\n3. ASCII arts\n4. shell info\n5. shutdown\n6. shell\n7. timer\n8. check updates" +
-            Style.RESET_ALL)
+            Style.BRIGHT
+            + "1. calc\n2. echo\n3. ASCII arts\n4. shell info\n5. shutdown\n6. shell\n7. timer\n8. check updates"
+            + Style.RESET_ALL
+        )
         choice = input(Fore.RED + "select> " + Style.RESET_ALL)
         if choice == "1":
             clear_screen()
