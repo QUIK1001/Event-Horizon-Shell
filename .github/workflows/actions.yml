@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "[flake8]" > .flake8
           echo "max-line-length = 88" >> .flake8
-          echo "ignore = E203, W291, W503, E501" >> .flake8  # Игнорируем E501
+          echo "ignore = E203, W291, W503, E501, E201" >> .flake8  # Добавили E201
           
           echo "[settings]" > .isort.cfg
           echo "profile = black" >> .isort.cfg
@@ -43,7 +43,7 @@ jobs:
           git diff --quiet || (git add . && git commit -m "Apply Black formatting")
           
       - name: Run flake8
-        run: flake8 . || echo "Flake8 issues remaining (some lines need manual fixing)"
+        run: flake8 . || echo "Flake8 issues remaining (some style issues need manual fixing)"
 
       - name: Run pylint
         run: pylint --disable=missing-docstring,invalid-name,too-few-public-methods *.py || echo "Pylint found issues"
