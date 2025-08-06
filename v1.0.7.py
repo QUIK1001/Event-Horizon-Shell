@@ -11,6 +11,7 @@ import requests
 from colorama import Back, Fore, Style
 from packaging import version
 
+
 SHELL_VERSION = "v1.0.7"
 REQUIRED_LIB = ["psutil", "requests", "colorama", "packaging"]
 

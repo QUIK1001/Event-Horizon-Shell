@@ -9,6 +9,7 @@ import requests
 from colorama import Fore, Style
 from packaging import version
 
+
 shell_version = "v1.0.4a"
 github_latest_update = (
     "https://raw.githubusercontent.com/QUIK1001/Event-Horizon/main/check_update"

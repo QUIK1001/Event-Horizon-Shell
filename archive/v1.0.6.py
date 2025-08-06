@@ -10,6 +10,7 @@ import requests
 from colorama import Back, Fore, Style
 from packaging import version
 
+
 # Check updates
 shell_version = "v1.0.6"
 github_latest_update = (
