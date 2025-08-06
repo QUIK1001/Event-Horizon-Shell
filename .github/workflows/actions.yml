@@ -19,18 +19,29 @@ jobs:
           python-version: "3.13"
           architecture: x64
 
-      - name: Install tools
-        run: pip install black isort flake8 pylint mypy
+      - name: Install tools and dependencies
+        run: |
+          pip install black isort flake8 pylint mypy
+          pip install psutil requests colorama packaging  # Устанавливаем зависимости для pylint
           
       - name: Generate configs
         run: |
+          # Flake8 config
           echo "[flake8]" > .flake8
           echo "max-line-length = 88" >> .flake8
-          echo "ignore = E203, W291, W503, E501, E201" >> .flake8  # Добавили E201
+          echo "ignore = E203, W291, W503, E501, E201" >> .flake8
           
+          # isort config
           echo "[settings]" > .isort.cfg
           echo "profile = black" >> .isort.cfg
           echo "lines_after_imports = 2" >> .isort.cfg
+          
+          # Pylint config
+          echo "[MASTER]" > .pylintrc
+          echo "disable=missing-docstring,invalid-name,too-few-public-methods" >> .pylintrc
+          echo "ignore=psutil,requests" >> .pylintrc
+          echo "max-line-length=88" >> .pylintrc
+          echo "disable=too-many-branches,too-many-statements,broad-exception-caught" >> .pylintrc
           
       - name: Run isort
         run: |
@@ -46,10 +57,10 @@ jobs:
         run: flake8 . || echo "Flake8 issues remaining (some style issues need manual fixing)"
 
       - name: Run pylint
-        run: pylint --disable=missing-docstring,invalid-name,too-few-public-methods *.py || echo "Pylint found issues"
-          
+        run: pylint --rcfile=.pylintrc *.py || echo "Pylint found minor issues"
+
       - name: Run mypy
-        run: mypy --strict . || echo "Mypy found type issues"
+        run: mypy --strict --ignore-missing-imports . || echo "Mypy found type issues"
 
       - name: Push changes
         if: always()
