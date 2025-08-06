@@ -61,7 +61,7 @@ if not check_lib():
 # Check updates
 
 GITHUB_LATEST_UPDATE = (
-    "https://raw.githubusercontent.com/QUIK1001/Event-Horizon/main/check_update"
+    "https://github.com/QUIK1001/Event-Horizon-Shell/blob/main/check_update"
 )
 
 
@@ -78,7 +78,7 @@ def check_updates():
             )
             print(
                 Fore.CYAN
-                + "Download: https://github.com/QUIK1001/Event-Horizon"
+                + "Download: https://github.com/QUIK1001/Event-Horizon-Shell/blob/main/check_update"
                 + Style.RESET_ALL
             )
             return True
