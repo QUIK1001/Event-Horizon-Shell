@@ -18,4 +18,4 @@
 
 # Requirements for v1.0.7+:
 ## packaging, requests, colorama and psutil libraries!
-### contact: belov0507artem@gmail.com
+
