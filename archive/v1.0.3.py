@@ -6,7 +6,6 @@ from datetime import datetime
 
 import psutil
 
-
 def clear_screen():
     os.system("clear" if os.name == "posix" else "cls")
 
