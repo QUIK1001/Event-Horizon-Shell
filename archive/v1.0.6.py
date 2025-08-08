@@ -16,7 +16,6 @@ github_latest_update = (
     "https://raw.githubusercontent.com/QUIK1001/Event-Horizon/main/check_update"
 )
 
-
 def check_updates():
     try:
         response = requests.get(github_latest_update, timeout=3)
