@@ -62,7 +62,7 @@ if not check_lib():
 # Check updates
 
 GITHUB_LATEST_UPDATE = (
-    "https://github.com/QUIK1001/Event-Horizon-Shell/blob/main/check_update"
+    "https://raw.githubusercontent.com/QUIK1001/Event-Horizon-Shell/main/check_updat"
 )
 
 
