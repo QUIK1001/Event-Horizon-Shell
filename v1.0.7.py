@@ -79,7 +79,7 @@ def check_updates():
             )
             print(
                 Fore.CYAN
-                + "Download: https://github.com/QUIK1001/Event-Horizon-Shell/blob/main/check_update"
+                + "Download: https://github.com/QUIK1001/Event-Horizon-Shell"
                 + Style.RESET_ALL
             )
             return True
