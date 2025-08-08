@@ -3,7 +3,6 @@ import random
 import sys
 import time
 
-
 def clear_screen():
     os.system("clear" if os.name == "posix" else "cls")
 
