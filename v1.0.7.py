@@ -6,12 +6,6 @@ import sys
 import time
 from datetime import datetime
 
-import psutil
-import requests
-from colorama import Back, Fore, Style
-from packaging import version
-
-
 SHELL_VERSION = "v1.0.7"
 REQUIRED_LIB = ["psutil", "requests", "colorama", "packaging"]
 
@@ -19,6 +13,7 @@ REQUIRED_LIB = ["psutil", "requests", "colorama", "packaging"]
 
 
 def check_lib():
+    time.sleep(0.2)
     missing_packages = []
     for package in REQUIRED_LIB:
         try:
@@ -27,7 +22,7 @@ def check_lib():
             missing_packages.append(package)
 
     if missing_packages:
-        print(Fore.RED + "⣏!⣽ Missing dependencies:" + Style.RESET_ALL)
+        print("⣏!⣽ Missing dependencies:")
         for pkg in missing_packages:
             print(f" - {pkg}")
 
@@ -37,20 +32,15 @@ def check_lib():
                 subprocess.check_call(
                     [sys.executable, "-m", "pip", "install", *missing_packages]
                 )
-                print(
-                    Fore.GREEN
-                    + "Dependencies installed successfully!"
-                    + Style.RESET_ALL
-                )
-                return True
+                print("Dependencies installed successfully!")
+                print("Please restart the EHS.")
+                sys.exit(0)
             except Exception as e:
-                print(Fore.RED + f"⣏!⣽ Failed to install: {str(e)}" + Style.RESET_ALL)
+                print(f"⣏!⣽ Failed to install: {str(e)}")
                 return False
         else:
             print(
-                Fore.RED
-                + "⣏!⣽ Some features may not work without dependencies."
-                + Style.RESET_ALL
+                "⣏Critical error!⣽ Try:\n run as administrator (or sudo)\n or install the libraries yourself"
             )
             return False
     return True
@@ -58,6 +48,13 @@ def check_lib():
 
 if not check_lib():
     sys.exit(1)
+
+
+from packaging import version
+from colorama import Back, Fore, Style
+import requests
+import psutil
+
 
 # Check updates
 
@@ -323,10 +320,9 @@ def shell():
             try:
                 os.mkdir(shell_mk_path)
                 print(
-                    Fore.GREEN
-                    + f"Folder '{shell_mkdir}' created in '{shell_parent_mkdir}'"
-                    + Style.RESET_ALL
-                )
+                    Fore.GREEN +
+                    f"Folder '{shell_mkdir}' created in '{shell_parent_mkdir}'" +
+                    Style.RESET_ALL)
             except FileExistsError:
                 print(
                     Fore.RED
@@ -363,13 +359,17 @@ def shell():
                     )
                 except Exception as e:
                     print(
-                        Fore.RED + f"⣏!⣽ Error deleting folder: {e}" + Style.RESET_ALL
-                    )
+                        Fore.RED +
+                        f"⣏!⣽ Error deleting folder: {e}" +
+                        Style.RESET_ALL)
         # dir
         elif command == "dir":
             try:
                 current_dir = os.getcwd()
-                print(Fore.CYAN + f"Contents of '{current_dir}':" + Style.RESET_ALL)
+                print(
+                    Fore.CYAN +
+                    f"Contents of '{current_dir}':" +
+                    Style.RESET_ALL)
                 for item in os.listdir(current_dir):
                     item_path = os.path.join(current_dir, item)
                     if os.path.isdir(item_path):
@@ -388,8 +388,9 @@ def shell():
             try:
                 os.chdir(os.path.expanduser(new_dir))
                 print(
-                    Fore.GREEN + f"Current directory: {os.getcwd()}" + Style.RESET_ALL
-                )
+                    Fore.GREEN +
+                    f"Current directory: {os.getcwd()}" +
+                    Style.RESET_ALL)
             except FileNotFoundError:
                 print(
                     Fore.RED
@@ -429,8 +430,9 @@ def shell():
                     )
                 except Exception as e:
                     print(
-                        Fore.RED + f"⣏!⣽ Error deleting folder: {e}" + Style.RESET_ALL
-                    )
+                        Fore.RED +
+                        f"⣏!⣽ Error deleting folder: {e}" +
+                        Style.RESET_ALL)
         # Perf
         elif command == "perf":
             clear_screen()
@@ -444,10 +446,9 @@ def shell():
                 while True:
                     clear_screen()
                     print(
-                        Fore.RED
-                        + f"CPU:{psutil.cpu_percent()}% \nRAM: {psutil.virtual_memory().percent}%"
-                        + Style.RESET_ALL
-                    )
+                        Fore.RED +
+                        f"CPU:{psutil.cpu_percent()}% \nRAM: {psutil.virtual_memory().percent}%" +
+                        Style.RESET_ALL)
                     time.sleep(1)
             except KeyboardInterrupt:
                 print(Fore.GREEN + "\n⣦ Monitor stopped." + Style.RESET_ALL)
@@ -486,8 +487,9 @@ def speed_test():
         total_time = max(0.1, end_time - start_test_time)
         speed_kbs = downloaded / total_time / 1024
         print(
-            Fore.GREEN + f"\nDownloaded: {downloaded / 1024:.1f} KB" + Style.RESET_ALL
-        )
+            Fore.GREEN +
+            f"\nDownloaded: {downloaded / 1024:.1f} KB" +
+            Style.RESET_ALL)
         print(Fore.GREEN + f"Time: {total_time:.2f} seconds" + Style.RESET_ALL)
         print(Fore.GREEN + f"Speed: {speed_kbs:.1f} KB/s" + Style.RESET_ALL)
     except requests.exceptions.Timeout:
@@ -514,16 +516,16 @@ def speed_test():
 def menu():
     if not check_lib():
         print(
-            Fore.RED + "⣏!⣽ Critical dependencies missing. Exiting." + Style.RESET_ALL
-        )
+            Fore.RED +
+            "⣏!⣽ Critical dependencies missing. Exiting." +
+            Style.RESET_ALL)
         sys.exit(1)
     event_horizon()
     while True:
         print(
-            Style.BRIGHT
-            + "1. calc\n2. echo\n3. ASCII arts\n4. shell info\n5. shutdown\n6. shell\n7. timer\n8. check updates\n9. check internet speed"
-            + Style.RESET_ALL
-        )
+            Style.BRIGHT +
+            "1. calc\n2. echo\n3. ASCII arts\n4. shell info\n5. shutdown\n6. shell\n7. timer\n8. check updates\n9. check internet speed" +
+            Style.RESET_ALL)
         choice = input(Fore.RED + "select> " + Style.RESET_ALL)
         if choice == "1":
             clear_screen()
