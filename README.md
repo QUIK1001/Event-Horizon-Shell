@@ -4,7 +4,7 @@
   - `calc`: Basic arithmetic operations
   - `echo`: Text output
   - `ascii_arts`: Dynamic ASCII graphics
-  - `sysinfo`: Displays system metadata
+  - `shell info`: Displays system metadata
   - `shutdown`: Terminates the shell
   - `shell`: Interactive mode with:
     - File management (`mkdir`/`rmdir`/`cd`/`dir`)
