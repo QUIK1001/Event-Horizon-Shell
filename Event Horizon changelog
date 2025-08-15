@@ -46,3 +46,10 @@ eighth version (05.08.2025)
 +cd (shell)
 +dir (shell)
 Requirements for v1.0.7+: packaging, requests, colorama and psutil libraries
+
+v1.0.8 Event Horizon
+ninth version (15.08.2025)
++calc updated
++time updated (shell)
++rmdir /all updated (shell)
+Requirements for v1.0.8+: packaging, requests, colorama and psutil libraries
