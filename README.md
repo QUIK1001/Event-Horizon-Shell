@@ -16,6 +16,6 @@
   - Automatic dependency checking
  - cool loading screen :)
 
-# Requirements for v1.0.7+:
+# Requirements for v1.0.8+:
 ## packaging, requests, colorama and psutil libraries!
 
