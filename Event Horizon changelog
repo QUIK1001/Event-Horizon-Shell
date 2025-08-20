@@ -53,3 +53,10 @@ ninth version (15.08.2025)
 +time updated (shell)
 +rmdir /all updated (shell)
 Requirements for v1.0.8+: packaging, requests, colorama and psutil libraries
+
+v1.0.9 Event Horizon
+tenth version (20.08.2025)
++changelog
++rmfile (shell)
++OS info
+Requirements for v1.0.9+: packaging, requests, colorama, art and psutil libraries
