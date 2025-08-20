@@ -1,21 +1,22 @@
 # Event Horizon Shell
 ## Features
 - **Built-in commands:**
-  - `calc`: Basic arithmetic operations
-  - `echo`: Text output
-  - `ascii_arts`: Dynamic ASCII graphics
-  - `shell info`: Displays system metadata
-  - `shutdown`: Terminates the shell
-  - `shell`: Interactive mode with:
-    - File management (`mkdir`/`rmdir`/`cd`/`dir`)
+  - `calc`: arithmetic operations
+  - `echo`: text output
+  - `ascii_arts`: ASCII arts
+  - `shell info`: displays shell version
+  - `shutdown`: terminates the shell
+  - `shell`: shell with:
+    - File management (`mkdir`/`rmdir`/`cd`/`dir`/`rmfile`)
     - Time display
     - Resource monitor (CPU/RAM via psutil)
+    - and more
   - `timer`: timer
   - `check updates`: check updates
   - `Сheck internet speed`: Сheck internet speed
   - Automatic dependency checking
  - cool loading screen :)
 
-# Requirements for v1.0.8+:
-## packaging, requests, colorama and psutil libraries!
+# Requirements for v1.0.9+:
+## packaging, requests, colorama, arts and psutil libraries!
 
