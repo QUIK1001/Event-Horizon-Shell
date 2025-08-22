@@ -1,0 +1,5 @@
+ psutil
+ requests
+ colorama
+ packaging
+ art
