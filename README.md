@@ -1,22 +1,18 @@
 # Event Horizon Shell
 ## Features
 - **Built-in commands:**
-  - `calc`: arithmetic operations
-  - `echo`: text output
-  - `ascii_arts`: ASCII arts
-  - `shell info`: displays shell version
-  - `shutdown`: terminates the shell
-  - `shell`: shell with:
-    - File management (`mkdir`/`rmdir`/`cd`/`dir`/`rmfile`)
-    - Time display
-    - Resource monitor (CPU/RAM via psutil)
-    - and more
-  - `timer`: timer
-  - `check updates`: check updates
-  - `Сheck internet speed`: Сheck internet speed
-  - Automatic dependency checking
- - cool loading screen :)
+  - Built-in shell with file operations
+  - Calculator
+  - System information
+  - Weather reports
+  - Internet speed test
+  - Update checking
+  - Text editor (create\open a text file using the default text editor)
+  - Logging system
+  - ASCII arts
+  - Timer
 
-# Requirements for v1.0.9+:
+
+# Requirements for v1.1.0+:
 ## packaging, requests, colorama, arts and psutil libraries!
 
