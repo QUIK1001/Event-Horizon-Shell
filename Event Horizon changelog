@@ -60,3 +60,10 @@ tenth version (20.08.2025)
 +rmfile (shell)
 +OS info
 Requirements for v1.0.9+: packaging, requests, colorama, art and psutil libraries
+
+v1.1.0 Event Horizon
+eleventh version (25.08.2025)
++logs
++weather
++text editors (create\open a text file using the default text editor)
+Requirements for v1.1.0+: packaging, requests, colorama, art and psutil libraries
