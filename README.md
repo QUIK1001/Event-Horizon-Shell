@@ -13,6 +13,6 @@
   - Timer
 
 
-# Requirements for v1.1.0+:
-## packaging, requests, colorama, art and psutil libraries!
+# Requirements for v1.1.1+:
+## packaging, requests, colorama, art, entudv and psutil libraries!
 
