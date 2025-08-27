@@ -1,4 +1,4 @@
-v1.1.0 Event Horizon 
+v1.1.1 Event Horizon 
 
 Files:
 
