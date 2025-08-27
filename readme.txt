@@ -24,6 +24,8 @@ Files:
 
 • logger.py - logging system
 
+• aliases.py - aliases
+
 • main.exe - EHS packed in .exe
 
 • Event Horizon Shell.exe - installer file
