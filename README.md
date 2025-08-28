@@ -14,5 +14,5 @@
 
 
 # Requirements for v1.1.1+:
-## packaging, requests, colorama, art, dotenv and psutil libraries!
+## packaging, requests, colorama, art, and psutil libraries!
 
