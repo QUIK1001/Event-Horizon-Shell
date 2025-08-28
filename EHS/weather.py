@@ -10,14 +10,6 @@ def weather():
     Uses OpenWeatherMap API to fetch weather data.
     """
     logger.log("Starting weather function", "INFO")
-    if not config.API_KEY:
-        logger.log("OpenWeather API key not configured", "FAIL")
-        print(f"{Fore.RED}⣏!⣽ OpenWeather API key not configured!{Style.RESET_ALL}")
-        print(f"{Fore.YELLOW}Please set OPENWEATHER_API_KEY in .env file{Style.RESET_ALL}")
-        input("Press Enter to continue")
-        clear_screen()
-        return
-    
     try: 
         city = input("⣦ Enter city name: ")
         logger.log(f"Weather request for city: {city}", "INFO")
