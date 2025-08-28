@@ -3,4 +3,3 @@
  colorama
  packaging
  art
- dotenv
