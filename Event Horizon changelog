@@ -74,4 +74,4 @@ twelfth version (27.08.2025)
 +copy, move, rename (shell)
 +aliases
 +themes 
-Requirements for v1.1.1+: packaging, requests, colorama, art, dotenv and psutil 
+Requirements for v1.1.1+: packaging, requests, colorama, art and psutil 
