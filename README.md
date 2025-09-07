@@ -13,7 +13,6 @@
   - Timer
   - Ping
 
-
 # Requirements for v1.1.2+:
 ## packaging, requests, colorama, art, rich and psutil libraries!
 
