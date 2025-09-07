@@ -11,8 +11,9 @@
   - Logging system
   - ASCII arts
   - Timer
+  - Ping
 
 
-# Requirements for v1.1.1+:
-## packaging, requests, colorama, art, and psutil libraries!
+# Requirements for v1.1.2+:
+## packaging, requests, colorama, art, rich and psutil libraries!
 
