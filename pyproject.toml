@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "event-horizon-shell"
-version = "1.1.2.post3"
+version = "1.1.2.post4"
 description = "Event Horizon Shell - advanced terminal shell with multiple utilities"
 readme = "README.md"
 authors = [
