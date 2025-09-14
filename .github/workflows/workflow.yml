@@ -1,28 +1,59 @@
-[build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+name: Python Package
 
-[project]
-name = "event-horizon-shell"
-version = "1.1.3"
-authors = [
-    { name = "QUIK1001", email = "your-email@example.com" }
-]
-description = "Event Horizon Shell - terminal interface"
-readme = "README.md"
-license = { file = "LICENSE" }
-requires-python = ">=3.8"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
-]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-[project.scripts]
-event-horizon-shell = "EHS.main:menu"
-ehs = "EHS.main:menu"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10]
 
-[tool.setuptools]
-packages = ["EHS"]
-
-[project.urls]
-Homepage = "https://github.com/QUIK1001/Event-Horizon-Shell"
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install pytest
+        
+    - name: Run tests
+      run: |
+        python -m pytest
+        
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
+        
+    - name: Build package
+      run: |
+        python setup.py sdist bdist_wheel
+        
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
