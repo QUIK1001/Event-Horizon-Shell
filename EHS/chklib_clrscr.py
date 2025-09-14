@@ -41,14 +41,13 @@ def check_lib():
         if chk_lib_install == "Y":
             try:
                 print(f"Attempting pip install: {chk_lib_missing_packages}", "INFO")
-                print(f"\nTrying <pip install --user {' '.join(chk_lib_missing_packages)}>\n\n")
+                print(f"\nTrying <pip install {' '.join(chk_lib_missing_packages)}>\n\n")
                 subprocess.check_call(
                     [
                         sys.executable,
                         "-m",
                         "pip",
                         "install",
-                        "--user",
                         *chk_lib_missing_packages,
                     ]
                 )
@@ -58,7 +57,7 @@ def check_lib():
                 sys.exit(0)
             except Exception as e:
                 print(f"Pip installation failed: {str(e)}", "FAIL")
-                print(f"\n⣏!⣽ <pip install --user {' '.join(chk_lib_missing_packages)}> failed:\n {str(e)}")
+                print(f"\n⣏!⣽ <pip install {' '.join(chk_lib_missing_packages)}> failed:\n {str(e)}")
                 print(f"\nTrying <upm add {' '.join(chk_lib_missing_packages)}>\n\n")
                 try:
                     print(f"Attempting upm install: {chk_lib_missing_packages}", "INFO")
@@ -80,7 +79,7 @@ def check_lib():
         else:
             print("User declined to install missing packages", "WARN")
             print("\nYou can install the packages manually with:")
-            print(f"pip install --user {' '.join(chk_lib_missing_packages)}")
+            print(f"pip install {' '.join(chk_lib_missing_packages)}")
             print("or")
             print(f"upm add {' '.join(chk_lib_missing_packages)}")
             time.sleep(1)
