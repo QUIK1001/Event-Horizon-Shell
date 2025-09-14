@@ -5,12 +5,18 @@ on:
     types: [published]
 
 jobs:
-  pypi-publish:
+  build-and-publish:
     runs-on: ubuntu-latest
     environment: release
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
     
     - name: Build package
       run: |
@@ -22,4 +28,3 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-    
