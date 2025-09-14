@@ -14,7 +14,7 @@ license = { text = "MIT" }
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+    "Operating System :: OS Independent"
 ]
 requires-python = ">=3.6"
 dependencies = [
@@ -31,5 +31,3 @@ ehs = "EHS.main:menu"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["EHS*"]
-exclude = ["tests*", "docs*"]
