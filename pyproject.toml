@@ -27,7 +27,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ehs = "EHS.__main__:menu"
+ehs = "__main__:menu"
 
 [tool.setuptools.packages.find]
 where = ["."]
