@@ -83,3 +83,10 @@ thirtieth version (07.09.2025)
 +ping
 +fixed/updated functions
 Requirements for v1.1.2+: packaging, requests, colorama, art, rich and psutil 
+
+v1.2.0 Event Horizon
+fourteenth version (28.09.2025)
++Plugin System
++Password Generator
++Archiver
+Requirements for v1.2.0+: packaging, requests, colorama, art, rich and psutil 
