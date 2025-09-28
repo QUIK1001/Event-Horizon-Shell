@@ -1,6 +1,6 @@
- psutil
- requests
- colorama
- packaging
- art
- rich
+psutil
+requests
+colorama
+packaging
+art
+rich
