@@ -10,20 +10,24 @@
 |  |  |
 | :--- | :--- |
 | **System utilities** | `shell`, `OS info`, `shell info` |
-| **Interesting features** | `echo`, `text_editor` , `ascii_arts` |
+| **Interesting features** | `echo`, `text_editor` , `ascii_arts`, `archiver` |
 | **Calculations** | `calc` |
 | **Internet** | `weather`, `check updates`, `ping`, `speed internet speed` |
 | **Settings** | `toggle_logs`, `toggle_theme`, `alias` |
-| **Utilities** | `timer` |
+| **Utilities** | `timer`, `password generator` |
 | **Help** | `tutorial`  |
+
+## Plugin System!
+-in beta
 
 ### When you first run the script, it will automatically check and offer to install all missing libraries (`colorama`, `requests`, `psutil`, `packaging`, `art`, `rich`).
 ### Install dependencies manually:
 ```bash
 pip install -r requirements.txt
 ```
-<h3 align="center">Event Horizon Shell loading</h3>
-<p align="center"> <img width="310" height="197" alt="image" src="https://github.com/user-attachments/assets/b2d86b28-2c7c-42be-9a75-9ee8b507696b" />
+<h3 align="center">Event Horizon Shell tutorial</h3>
+<p align="center"> <img width="519" height="685" alt="image" src="https://github.com/user-attachments/assets/8989ce65-9006-4305-8a1b-0cbe622f57d9"
+" />
 </p>
 
 <div align="center">
