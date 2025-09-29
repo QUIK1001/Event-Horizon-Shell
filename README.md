@@ -1,5 +1,6 @@
 <h1 align="center">Event Horizon Shell</h1>
-<h3 align="center">Console shell in python
+<h2 align="center">Console shell in python</h2>
+<h3 align="center">by quik/QUIK1001</h3>
   
 <p align="center">
   <br>
@@ -55,4 +56,6 @@ cd Event-Horizon-Shell
 If you like Event Horizon Shell, please give it a star on GitHub!
 
 ## [I recommend visiting the Telegram channel](https://t.me/Event_Horizon_Shell)
+;)
 </div>
+
