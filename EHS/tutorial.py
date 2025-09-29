@@ -30,8 +30,8 @@ def tutorial():
                 "15. ping\n", 
                 "16. Password generator\n", 
                 "17. ZIP Archiver\n", 
-                "18. Plugin sys\n", 
-                "19. Shutdown\n", 
+                "18. Shutdown\n", 
+                "19. Plugin sys\n", 
                 "20. Exit Tutorial\n" 
             )
 
