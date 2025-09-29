@@ -32,6 +32,6 @@ pip install -r requirements.txt
 
 <div align="center">
 If you like Event Horizon Shell, please give it a star on GitHub!
-</div>
 
-[I recommend visiting the Telegram channel](https://t.me/Event_Horizon_Shell)
+## [I recommend visiting the Telegram channel](https://t.me/Event_Horizon_Shell)
+</div>
