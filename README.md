@@ -25,11 +25,13 @@
 ```bash
 pip install -r requirements.txt
 ```
-<h3 align="center">Event Horizon Shell tutorial</h3>
-<p align="center"> <img width="519" height="685" alt="image" src="https://github.com/user-attachments/assets/8989ce65-9006-4305-8a1b-0cbe622f57d9"
-" />
+<h3 align="center">Event Horizon Shell shell</h3>
+<p align="center"> <img width="562" height="576" alt="image" src="https://github.com/user-attachments/assets/2b24869f-0a2c-4ee1-b903-8e8cc66e01d3" />
+
 </p>
 
 <div align="center">
 If you like Event Horizon Shell, please give it a star on GitHub!
 </div>
+
+[I recommend visiting the Telegram channel](https://t.me/Event_Horizon_Shell)
