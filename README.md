@@ -4,7 +4,7 @@
   
 <p align="center">
   <br>
-  <img src="https://img.shields.io/badge/Version-1.2.0-green" alt="Version:">
+  <img src="https://img.shields.io/badge/Version-1.2.1-green" alt="Version:">
   <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License:">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20Android-black" alt="Platform">
 </p>
@@ -12,7 +12,7 @@
 ## Features
 
 ### **System Utilities**
-- **File Manager** - navigation, copying, moving, renaming
+- **File Manager** - navigation, copying, moving, renaming, finding
 - **System Information** - detailed OS, CPU, and RAM statistics
 - **Monitoring** - real-time usage Resources
 
@@ -47,8 +47,9 @@ Create your own extensions!
 git clone https://github.com/QUIK1001/Event-Horizon-Shell.git
 cd Event-Horizon-Shell
 ```
-<h3 align="center">Event Horizon Shell shell</h3>
-<p align="center"> <img width="562" height="576" alt="image" src="https://github.com/user-attachments/assets/2b24869f-0a2c-4ee1-b903-8e8cc66e01d3" />
+<h3 align="center">Event Horizon Shell tutorial</h3>
+<p align="center"> <img width="403" height="617" alt="image" src="https://github.com/user-attachments/assets/88247f49-58e4-4fa1-b2ce-7c32a6bc1a8a" />
+
 
 </p>
 
