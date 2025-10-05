@@ -93,6 +93,6 @@ Requirements for v1.2.0+: packaging, requests, colorama, art, rich and psutil
 
 v1.2.1 Event Horizon
 fifteenth version (05.10.2025)
-+wc (shell)
-+grep (shell)
-Requirements for v1.2.1+: packaging, requests, colorama, art, rich and psutil 
++ wc (shell)
++ grep (shell)
+Requirements for v1.2.1+: packaging, requests, colorama, art, rich and psutil
