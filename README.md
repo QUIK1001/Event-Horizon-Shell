@@ -46,7 +46,7 @@ Create your own extensions!
 #install git
 winget install Git.git
 # Install Git using your package manager:
-# sudo <package-manager> install (-S) git
+sudo <package-manager> install (-S) git
 # Clone the repository
 git clone https://github.com/QUIK1001/Event-Horizon-Shell.git
 cd Event-Horizon-Shell
