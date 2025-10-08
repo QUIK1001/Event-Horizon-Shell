@@ -599,19 +599,17 @@ def shell():
             elif shell_command == "wc":
                 from pathlib import Path
                 try:
-                    plugin_dir = Path(__file__).parent.resolve()
-
                     user_input = input("⣦ File to analyze: ").strip()
                     if not user_input:
                         print(f"{Fore.RED}⣏!⣽ Filename cannot be empty!{Style.RESET_ALL}")
                         continue
 
                     filename = Path(user_input)
-
+                
                     if not filename.is_absolute():
-                        filename = plugin_dir / filename
-
-                    filename = filename.expanduser().resolve()
+                        filename = Path.cwd() / filename
+                    
+                    filename = filename.resolve()
 
                     if not filename.exists():
                         print(f"{Fore.RED}⣏!⣽ File not found: {filename}{Style.RESET_ALL}")
@@ -642,7 +640,6 @@ def shell():
                         print(f"{Fore.CYAN}Avg chars/line: {avg_chars_per_line:.1f}{Style.RESET_ALL}")
 
                 except PermissionError:
-                  
                     print(f"{Fore.RED}⣏!⣽ Permission denied: {filename}{Style.RESET_ALL}")
                 except Exception as e:
                     print(f"{Fore.RED}⣏!⣽ Error: {str(e)}{Style.RESET_ALL}")
