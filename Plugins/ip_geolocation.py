@@ -15,6 +15,8 @@ def main():
         print(f"{Fore.MAGENTA}Координаты (широта, долгота): {data.get('loc')}{Style.RESET_ALL}")
         print(f"{Style.BRIGHT}Часовой пояс: {data.get('timezone')}")
 
+        print("\nКоординаты приблизительные. " \
+        "Геолокация по IP определяет местоположение провайдера, а не ваше точное местоположение")
     except requests.exceptions.RequestException as e:
         print(f"{Fore.RED}Ошибка сети или запроса: {e}{Style.RESET_ALL}")
 
