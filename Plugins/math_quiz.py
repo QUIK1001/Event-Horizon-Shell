@@ -1,6 +1,8 @@
 # Move to EHS/ folder
+
 import random
 import json
+import time
 import os
 import math
 from fractions import Fraction
@@ -10,6 +12,8 @@ init(autoreset=True)
 
 CONFIG_FILE = "quiz_config.json"
 QUESTIONS_FILE = "custom_questions.json"
+STATS_FILE = "quiz_stats.json"
+MISTAKES_FILE = "quiz_mistakes.json"
 
 def format_fraction(frac: Fraction) -> str:
     if frac.denominator == 1:
@@ -331,7 +335,136 @@ def delete_custom_question(custom_qs):
     except ValueError:
         print(f"{Fore.RED}! Введите число.{Style.RESET_ALL}")
 
+def load_statistics():
+    """Загружает статистику из файла"""
+    if os.path.exists(STATS_FILE):
+        try:
+            with open(STATS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except:
+            pass
+    return {"total_quizzes": 0, "best_score": 0, "average_score": 0, "total_questions": 0, "correct_answers": 0}
+
+def save_statistics(stats):
+    """Сохраняет статистику в файл"""
+    with open(STATS_FILE, "w", encoding="utf-8") as f:
+        json.dump(stats, f, indent=4)
+
+def update_statistics(score, total_questions):
+    """Обновляет статистику после теста"""
+    stats = load_statistics()
+    
+    stats["total_quizzes"] += 1
+    stats["total_questions"] += total_questions
+    stats["correct_answers"] += score
+    
+    percent = (score / total_questions) * 100
+    if percent > stats["best_score"]:
+        stats["best_score"] = round(percent, 1)
+    
+    if stats["total_quizzes"] > 0:
+        total_percent = (stats["correct_answers"] / stats["total_questions"]) * 100
+        stats["average_score"] = round(total_percent, 1)
+    
+    save_statistics(stats)
+
+def show_statistics():
+    """Показывает статистику"""
+    stats = load_statistics()
+    
+    print(f"\n{Fore.CYAN}СТАТИСТИКА{Style.RESET_ALL}")
+    print(f"{'='*30}")
+    print(f"Всего тестов пройдено: {stats['total_quizzes']}")
+    print(f"Всего вопросов отвечено: {stats['total_questions']}")
+    print(f"Правильных ответов: {stats['correct_answers']}")
+    
+    if stats['total_quizzes'] > 0:
+        print(f"Лучший результат: {stats['best_score']}%")
+        print(f"Средний результат: {stats['average_score']}%")
+        
+        if stats['average_score'] >= 90:
+            level = "Математик!"
+        elif stats['average_score'] >= 75:
+            level = "Отличник!"
+        elif stats['average_score'] >= 60:
+            level = "Хорошист!"
+        else:
+            level = "Новичок"
+        
+        print(f"Ваш уровень: {level}")
+    else:
+        print(f"{Fore.YELLOW}Пройдите хотя бы один тест для получения статистики{Style.RESET_ALL}")
+
+def load_mistakes():
+    """Загружает список ошибок"""
+    if os.path.exists(MISTAKES_FILE):
+        try:
+            with open(MISTAKES_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except:
+            pass
+    return []
+
+def save_mistakes(mistakes):
+    """Сохраняет список ошибок"""
+    with open(MISTAKES_FILE, "w", encoding="utf-8") as f:
+        json.dump(mistakes, f, ensure_ascii=False, indent=4)
+
+def add_mistake(question_data, user_answer, correct_answer):
+    """Добавляет ошибку в список"""
+    mistakes = load_mistakes()
+    
+    mistake = {
+        "question": question_data["question"],
+        "user_answer": user_answer,
+        "correct_answer": correct_answer,
+        "options": question_data["options"],
+        "date": time.strftime("%Y-%m-%d %H:%M")
+    }
+    
+    for existing in mistakes:
+        if (existing["question"] == mistake["question"] and 
+            existing["user_answer"] == mistake["user_answer"]):
+            return
+    
+    mistakes.append(mistake)
+    save_mistakes(mistakes)
+
+def review_mistakes():
+    """Показывает и позволяет повторить ошибки"""
+    mistakes = load_mistakes()
+    
+    if not mistakes:
+        print(f"\n{Fore.GREEN}Поздравляем! У вас нет ошибок для повторения!{Style.RESET_ALL}")
+        return
+    
+    print(f"\n{Fore.RED}ПОВТОРЕНИЕ ОШИБОК ({len(mistakes)} вопросов){Style.RESET_ALL}")
+    print(f"{'='*40}")
+    
+    correct_count = 0
+    for i, mistake in enumerate(mistakes, 1):
+        print(f"\n{Fore.YELLOW}Вопрос {i}:{Style.RESET_ALL} {mistake['question']}")
+        print(f"{Fore.RED}Ваш ответ: {mistake['user_answer']}{Style.RESET_ALL}")
+        print(f"{Fore.GREEN}Правильный ответ: {mistake['correct_answer']}{Style.RESET_ALL}")
+        
+        response = input("\nЗапомнили правильный ответ? (д/н): ").strip().lower()
+        if response in ['д', 'да', 'y', 'yes']:
+            correct_count += 1
+    
+    if correct_count == len(mistakes):
+        save_mistakes([])
+        print(f"\n{Fore.GREEN}Все ошибки исправлены! Список очищен.{Style.RESET_ALL}")
+    else:
+        print(f"\n{Fore.YELLOW}Осталось ошибок для повторения: {len(mistakes) - correct_count}{Style.RESET_ALL}")
+
+def clear_mistakes():
+    """Очищает список ошибок"""
+    if os.path.exists(MISTAKES_FILE):
+        os.remove(MISTAKES_FILE)
+    print(f"{Fore.GREEN}Список ошибок очищен{Style.RESET_ALL}")
+
 def run_quiz(num_questions):
+    start_time = time.time()
     questions = []
     for _ in range(num_questions):
         gen = random.choice(ALL_GENERATORS)
@@ -346,6 +479,8 @@ def run_quiz(num_questions):
         return
 
     score = 0
+    wrong_answers = []
+    
     for i, q in enumerate(all_qs):
         print(f"\n{Fore.BLUE}Вопрос {i+1}:{Style.RESET_ALL} {q['question']}")
         for j, opt in enumerate(q['options'], 1):
@@ -356,15 +491,34 @@ def run_quiz(num_questions):
                 print(f"{Fore.GREEN} Верно!{Style.RESET_ALL}")
                 score += 1
             else:
-                print(f"{Fore.RED}! Неверно.{Style.RESET_ALL} Правильный ответ: {q['options'][q['answer']]}")
+                user_answer = q['options'][user] if 0 <= user < len(q['options']) else "неверный номер"
+                correct_answer = q['options'][q['answer']]
+                print(f"{Fore.RED}! Неверно.{Style.RESET_ALL} Правильный ответ: {correct_answer}")
+                add_mistake(q, user_answer, correct_answer)
+                
         except (ValueError, IndexError):
             print(f"{Fore.YELLOW}! Некорректный ввод.{Style.RESET_ALL}")
-    
+    end_time = time.time()
+    duration = end_time - start_time
     total = len(all_qs)
     if total > 0:
         percent = score / total * 100
         color = Fore.GREEN if percent >= 80 else Fore.YELLOW if percent >= 60 else Fore.RED
-        print(f"\n{Style.BRIGHT}🎉 Результат:{Style.RESET_ALL} {score} из {total} ({color}{percent:.1f}%{Style.RESET_ALL})")
+        print(f"\n{Style.BRIGHT}Результат:{Style.RESET_ALL} {score} из {total} ({color}{percent:.1f}%{Style.RESET_ALL})")
+        print(f"Время прохождения: {duration:.1f} секунд")
+        update_statistics(score, total)
+        
+        if score < total:
+            print(f"\n{Fore.CYAN}Хотите повторить вопросы, где ошиблись? (д/н){Style.RESET_ALL}")
+            if input().strip().lower() in ['д', 'да', 'y', 'yes']:
+                review_mistakes()
+
+def show_file_paths():
+    """Показывает пути к конфигурационным файлам"""
+    print(f"\n{Fore.GREEN}Пути к файлам:{Style.RESET_ALL}")
+    print(f"Файл вопросов: {os.path.abspath(QUESTIONS_FILE)}")
+    print(f"Файл настроек: {os.path.abspath(CONFIG_FILE)}")
+    print(f"\n{Fore.YELLOW}Скопируйте эти пути для переноса файлов{Style.RESET_ALL}")
 
 def settings_menu():
     num = load_config()
@@ -380,49 +534,67 @@ def settings_menu():
                 return new_num
             else:
                 print(f"{Fore.RED}! Допустимо от 1 до 20.{Style.RESET_ALL}")
+
     except ValueError:
         print(f"{Fore.RED}! Введите число.{Style.RESET_ALL}")
     return num
 
 def main():
-    num_questions = load_config()
-    custom = load_custom_questions()
-    while True:
-        print(f"\n{Style.BRIGHT}{'='*40}{Style.RESET_ALL}")
-        print(f"{Fore.LIGHTBLUE_EX}Математический тренажёр{Style.RESET_ALL}")
-        print(f"1. Пройти тест ({num_questions} вопросов)")
-        print("2. Добавить свой вопрос")
-        print("3. Показать свои вопросы")
-        print("4. Удалить вопрос") 
-        print("5. Настройки")
-        print("6. Выход")
-        print(f"{Style.BRIGHT}{'='*40}{Style.RESET_ALL}")
-        c = input("Выберите действие: ").strip()
-        if c == "1":
-            run_quiz(num_questions)
-        elif c == "2":
-            add_custom_question(custom)
-            custom = load_custom_questions()
-        elif c == "3":
-            if not custom:
-                print(f"{Fore.YELLOW}! Нет своих вопросов.{Style.RESET_ALL}")
+    try:
+        num_questions = load_config()
+        custom = load_custom_questions()
+        while True:
+            print(f"\n{Style.BRIGHT}{'='*40}{Style.RESET_ALL}")
+            print(f"{Fore.LIGHTBLUE_EX}Математический тренажёр{Style.RESET_ALL}")
+            print(f"1. Пройти тест ({num_questions} вопросов)")
+            print("2. Добавить свой вопрос")
+            print("3. Показать свои вопросы")
+            print("4. Удалить вопрос")
+            print("5. Показать путь к файлам с настройками") 
+            print("6. Статистика")
+            print("7. Повторить ошибки")
+            print("8. Очистить ошибки")
+            print("9. Настройки")
+            print("10. Выход")
+            print(f"{Style.BRIGHT}{'='*40}{Style.RESET_ALL}")
+            choice = input("Выберите действие: ").strip()
+            if choice == "1":
+                run_quiz(num_questions)
+            elif choice == "2":
+                add_custom_question(custom)
+                custom = load_custom_questions()
+            elif choice == "3":
+                if not custom:
+                    print(f"{Fore.YELLOW}! Нет своих вопросов.{Style.RESET_ALL}")
+                else:
+                    for i, q in enumerate(custom, 1):
+                        print(f"\n{i}. {q['question']}")
+                        for j, opt in enumerate(q['options'], 1):
+                            mark = f" {Fore.GREEN}←{Style.RESET_ALL}" if j-1 == q['answer'] else ""
+                            print(f"   {j}. {opt}{mark}")
+            elif choice == "4":
+                delete_custom_question(custom)
+                custom = load_custom_questions()
+            elif choice == "5":
+                show_file_paths()
+            elif choice == "6":
+                show_statistics()
+            elif choice == "7":
+                review_mistakes()
+            elif choice == "8":
+                clear_mistakes()
+            elif choice == "9":
+                num_questions = settings_menu()
+            elif choice == "10":
+                print(f"{Fore.CYAN}До новых встреч! {Style.RESET_ALL}")
+                break
             else:
-                for i, q in enumerate(custom, 1):
-                    print(f"\n{i}. {q['question']}")
-                    for j, opt in enumerate(q['options'], 1):
-                        mark = f" {Fore.GREEN}←{Style.RESET_ALL}" if j-1 == q['answer'] else ""
-                        print(f"   {j}. {opt}{mark}")
-        elif c == "4":
-            delete_custom_question(custom)
-            custom = load_custom_questions()
-        elif c == "5":
-            num_questions = settings_menu()
-        elif c == "6":
-            print(f"{Fore.CYAN}До новых встреч! {Style.RESET_ALL}")
-            break
-        else:
-            print(f"{Fore.YELLOW}! Неверный выбор.{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}! Неверный выбор.{Style.RESET_ALL}")
+
+    except KeyboardInterrupt:
+        print(f"\n{Fore.YELLOW}Выход по Ctrl+C.{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     main()
+
 # by quik
