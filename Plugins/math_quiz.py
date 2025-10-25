@@ -274,14 +274,26 @@ def add_custom_question(custom_qs):
     if not q_text:
         print(f"{Fore.RED}! Пустой вопрос.{Style.RESET_ALL}")
         return
+    
     options = []
-    print("Введите варианты (минимум 2):")
-    while len(options) < 2:
+    print("Введите варианты (минимум 2, Enter для завершения):")
+    while True:
         opt = input(f"Вариант {len(options)+1}: ").strip()
-        if opt:
-            options.append(opt)
-        else:
-            print(f"{Fore.YELLOW}! Вариант не может быть пустым.{Style.RESET_ALL}")
+        if not opt:
+            if len(options) >= 2:
+                break
+            else:
+                print(f"{Fore.YELLOW}! Нужно минимум 2 варианта.{Style.RESET_ALL}")
+                continue
+        if opt in options:
+            print(f"{Fore.YELLOW}! Такой вариант уже есть.{Style.RESET_ALL}")
+            continue
+        options.append(opt)
+    
+    print(f"\nВарианты ответов:")
+    for i, opt in enumerate(options, 1):
+        print(f"  {i}. {opt}")
+    
     while True:
         try:
             ans = int(input(f"Номер правильного ответа (1–{len(options)}): "))
@@ -290,6 +302,7 @@ def add_custom_question(custom_qs):
             print(f"{Fore.YELLOW}! Неверный номер.{Style.RESET_ALL}")
         except ValueError:
             print(f"{Fore.YELLOW}! Введите число.{Style.RESET_ALL}")
+    
     custom_qs.append({"question": q_text, "options": options, "answer": ans - 1})
     save_custom_questions(custom_qs)
     print(f"{Fore.GREEN} Вопрос сохранён!{Style.RESET_ALL}")
@@ -412,4 +425,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-#by quik
+# by quik
