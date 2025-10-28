@@ -207,7 +207,7 @@ st.markdown("---")
 
 with st.sidebar:
     st.header("⚙️ Настройки")
-    graph_theme = st.selectbox(
+    theme = st.selectbox(
         "Тема графиков",
         ["plotly", "plotly_white", "plotly_dark", "none"]
     )
@@ -810,7 +810,7 @@ with tabs[3]:
                                       scene=dict(xaxis_title='X',
                                                  yaxis_title='Y',
                                                  zaxis_title='Z'),
-                                      template=graph_theme,
+                                      template=theme,
                                       height=600)
 
                     st.plotly_chart(fig, use_container_width=True)
@@ -860,7 +860,7 @@ with tabs[4]:
                                   scene=dict(xaxis_title='X',
                                              yaxis_title='Y',
                                              zaxis_title='Z'),
-                                  template=graph_theme,
+                                  template=theme,
                                   height=700)
 
                 st.plotly_chart(fig, use_container_width=True)
@@ -916,7 +916,7 @@ with tabs[4]:
                                   scene=dict(xaxis_title='X',
                                              yaxis_title='Y',
                                              zaxis_title='Z'),
-                                  template=graph_theme,
+                                  template=theme,
                                   height=700)
 
                 st.plotly_chart(fig, use_container_width=True)
@@ -1007,7 +1007,7 @@ with tabs[4]:
                         zaxis_title='',
                         aspectmode='data'
                     ),
-                    template=graph_theme,
+                    template=theme,
                     height=700
                 )
 
@@ -1227,7 +1227,7 @@ with tabs[7]:
                 fig.update_layout(title="График функции с найденным минимумом",
                                   xaxis_title="x",
                                   yaxis_title="f(x)",
-                                  template=graph_theme)
+                                  template=theme)
                 st.plotly_chart(fig, use_container_width=True)
                 save_to_history(f"Оптимизация: {func_opt}",
                                 f"x_min={result.x[0]:.6f}")
@@ -1272,7 +1272,7 @@ with tabs[7]:
                         fig.add_trace(go.Scatter(x=[result.x[0]], y=[result.x[1]],
                                                  mode='markers', marker=dict(size=12, color='red'),
                                                  name='Минимум'))
-                        fig.update_layout(title="Контурный график функции", template=graph_theme)
+                        fig.update_layout(title="Контурный график функции", template=theme)
                         st.plotly_chart(fig, use_container_width=True)
                     save_to_history(f"Многомерная оптимизация: {func_multi}", f"x_min={result.x}")
             except Exception as e:
@@ -1327,7 +1327,7 @@ with tabs[7]:
                     else:
                         fig.add_trace(go.Contour(x=x1, y=x2, z=Z_constr, contours=dict(coloring='lines', showlabels=True, start=0, end=0, size=0.1), line_width=2, showscale=False, name='g(x)≥0'))
                     fig.add_trace(go.Scatter(x=[result.x[0]], y=[result.x[1]], mode='markers', marker=dict(size=12, color='red'), name='Решение'))
-                    fig.update_layout(title="Оптимизация с ограничениями", template=graph_theme)
+                    fig.update_layout(title="Оптимизация с ограничениями", template=theme)
                     st.plotly_chart(fig, use_container_width=True)
 
                 save_to_history(f"Оптимизация с ограничениями: {func_constr}", f"x={result.x}")
@@ -1366,7 +1366,7 @@ with tabs[7]:
                 fig.update_layout(title="Аппроксимация данных",
                                   xaxis_title="x",
                                   yaxis_title="y",
-                                  template=graph_theme)
+                                  template=theme)
                 st.plotly_chart(fig, use_container_width=True)
                 st.success("Коэффициенты полинома:")
                 st.code(str(poly))
@@ -1438,7 +1438,7 @@ with tabs[8]:
             fig.update_yaxes(title_text="Амплитуда", row=1, col=1)
             fig.update_yaxes(title_text="Мощность", row=2, col=1)
 
-            fig.update_layout(height=800, template=graph_theme)
+            fig.update_layout(height=800, template=theme)
 
             st.plotly_chart(fig, use_container_width=True)
 
@@ -1487,7 +1487,7 @@ with tabs[8]:
                            name='Линия тренда',
                            line=dict(color='red', width=2)))
 
-            fig.update_layout(template=graph_theme, height=600)
+            fig.update_layout(template=theme, height=600)
             st.plotly_chart(fig, use_container_width=True)
 
             col1, col2, col3 = st.columns(3)
@@ -1533,7 +1533,7 @@ with tabs[8]:
             fig.update_layout(title="Фактические vs Предсказанные значения",
                               xaxis_title="Фактические",
                               yaxis_title="Предсказанные",
-                              template=graph_theme)
+                              template=theme)
 
             st.plotly_chart(fig, use_container_width=True)
 
@@ -1579,7 +1579,7 @@ with tabs[9]:
 
                 fig = go.Figure()
                 fig.add_trace(go.Scatter(x=sol.t, y=sol.y[0], mode='lines', name='y(t)'))
-                fig.update_layout(title=f"Решение dy/dt = {f_expr}", xaxis_title="t", yaxis_title="y", template=graph_theme)
+                fig.update_layout(title=f"Решение dy/dt = {f_expr}", xaxis_title="t", yaxis_title="y", template=theme)
                 st.plotly_chart(fig, use_container_width=True)
 
                 st.success("Решение успешно построено!")
@@ -1613,7 +1613,7 @@ with tabs[9]:
                 fig = go.Figure()
                 fig.add_trace(go.Scatter(x=sol.t, y=sol.y[0], mode='lines', name='y(t)'))
                 fig.add_trace(go.Scatter(x=sol.t, y=sol.y[1], mode='lines', name="y'(t)", line=dict(dash='dash')))
-                fig.update_layout(title=f"Решение y'' = {f_expr}", xaxis_title="t", yaxis_title="y, y'", template=graph_theme)
+                fig.update_layout(title=f"Решение y'' = {f_expr}", xaxis_title="t", yaxis_title="y, y'", template=theme)
                 st.plotly_chart(fig, use_container_width=True)
 
                 st.success("Система решена!")
@@ -1654,7 +1654,7 @@ with tabs[9]:
                 fig = go.Figure()
                 for i in range(n_eq):
                     fig.add_trace(go.Scatter(x=sol.t, y=sol.y[i], mode='lines', name=f'y{i}(t)'))
-                fig.update_layout(title="Решение системы ОДУ", xaxis_title="t", yaxis_title="yᵢ(t)", template=graph_theme)
+                fig.update_layout(title="Решение системы ОДУ", xaxis_title="t", yaxis_title="yᵢ(t)", template=theme)
                 st.plotly_chart(fig, use_container_width=True)
 
                 st.success("Система решена!")
