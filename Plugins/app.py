@@ -89,7 +89,6 @@ def main():
             input("Press Enter to continue...")
         return
 
-import streamlit as st
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -102,7 +101,6 @@ from datetime import datetime
 import base64
 import math
 import functools
-import time
 import re
 import cmath
 from fractions import Fraction
