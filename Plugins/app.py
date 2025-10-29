@@ -108,7 +108,7 @@ import plotly.figure_factory as ff
 from math import gcd as math_gcd
 import time
 import streamlit as st
-
+import sympy as sp
 
 if 'welcome_shown' not in st.session_state:
     welcome_container = st.empty()
