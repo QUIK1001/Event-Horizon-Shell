@@ -277,13 +277,13 @@ class AdvancedMathParser:
                     raise ValueError(f"Недостаточно аргументов для {token}")
                 arg = stack.pop()
                 try:
-                    complex_functions = ['real', 'imag', 'conj', 'arg', 're', 'im', 'mod']
-                    combinatoric_functions = ['C', 'P', 'comb', 'perm']
-                    
+                    complex_functions = {'real', 'imag', 'conj', 'arg', 're', 'im', 'mod'}
+                    integer_functions = {'factorial', 'C', 'P', 'comb', 'perm'}
+
                     if token in complex_functions:
-                        if token in ['real', 're']:
+                        if token in ('real', 're'):
                             result = arg.real
-                        elif token in ['imag', 'im']:
+                        elif token in ('imag', 'im'):
                             result = arg.imag
                         elif token == 'conj':
                             result = arg.conjugate()
@@ -292,15 +292,23 @@ class AdvancedMathParser:
                         elif token == 'mod':
                             result = abs(arg)
                         result = complex(result)
-                        
-                    elif token in combinatoric_functions:
-                        arg = int(round(arg.real))
-                        result = self.functions[token](arg)
+
+                    elif token in integer_functions:
+                        arg_real = arg.real
+                        if abs(arg_real - round(arg_real)) > 1e-10:
+                            raise ValueError(f"Функция {token} требует целочисленный аргумент, получено: {arg_real}")
+                        arg_int = int(round(arg_real))
+                        result = self.functions[token](arg_int)
                         result = complex(result)
+
                     else:
-                        arg = arg.real
-                        result = self.functions[token](arg)
+                        arg_real = arg.real
+                        result = self.functions[token](arg_real)
                         result = complex(result)
+
+                    stack.append(result)
+                except Exception as e:
+                    raise ValueError(f"Ошибка в функции {token}: {e}")
                     
                     stack.append(result)
                 except Exception as e:
@@ -1377,7 +1385,7 @@ with tabs[5]:
 
     plot_3d_type = st.selectbox(
         "Тип 3D графика",
-        ["Поверхность z=f(x,y)", "Параметрическая поверхность", "Параметрическая кривая", "Векторное поле"],
+        ["Поверхность z=f(x,y)", "Параметрическая кривая", "Векторное поле"],
         key="3d_type"
     )
 
