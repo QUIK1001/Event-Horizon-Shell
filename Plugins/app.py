@@ -534,9 +534,9 @@ st.set_page_config(
     page_title="Math Calculator",
     page_icon="🧮",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
-
+st.caption("by quik")
 st.markdown("""
 <style>
     .main { padding: 1rem; }
