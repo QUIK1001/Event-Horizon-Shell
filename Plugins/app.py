@@ -182,6 +182,22 @@ if 'welcome_shown' not in st.session_state:
     st.session_state.welcome_shown = True
     st.rerun()
 
+def beta_func(a, b):
+    """Бета-функция через гамма-функции"""
+    return math.gamma(a) * math.gamma(b) / math.gamma(a + b)
+
+def combination(n, k):
+    """Число сочетаний C(n, k)"""
+    if k > n or k < 0:
+        return 0
+    return math.comb(int(n), int(k))
+
+def permutation(n, k):
+    """Число перестановок P(n, k)"""
+    if k > n or k < 0:
+        return 0
+    return math.perm(int(n), int(k))
+
 class AdvancedMathParser:
     def __init__(self):
         self.operators = {'+', '-', '*', '/', '**', '//', '%'}
@@ -200,9 +216,10 @@ class AdvancedMathParser:
             'factorial': math.factorial,
             'gamma': math.gamma,
             'erf': math.erf, 'erfc': math.erfc,
+            'beta': lambda x: math.gamma(x) * math.gamma(1-x) if x > 0 else float('nan'),
             'heaviside': lambda x: 1 if x >= 0 else 0,
             'step': lambda x: 1 if x >= 0 else 0,
-            'C': math.comb, 'P': math.perm, 'comb': math.comb, 'perm': math.perm,
+            'C': combination, 'P': permutation, 'comb': combination, 'perm': permutation,
             'real': lambda x: x.real, 'imag': lambda x: x.imag,
             'conj': lambda x: x.conjugate(), 'arg': lambda x: cmath.phase(x),
             're': lambda x: x.real, 'im': lambda x: x.imag, 'mod': abs,
@@ -214,7 +231,15 @@ class AdvancedMathParser:
         }
         self.cache = {}
         self.variables = {}
-
+        self.functions.update({
+            'erf': math.erf,
+            'erfc': math.erfc,
+            'gamma': math.gamma,
+            'C': combination,
+            'P': permutation,
+            'comb': combination,
+            'perm': permutation,
+        })
     def tokenize(self, expression):
         """Токенизация выражения"""
         pattern = r'(\d+\.?\d*[jJ]|\d+/\d+|\d+\.?\d*([eE][+-]?\d+)?|[a-zA-Z_][a-zA-Z0-9_]*|\*\*|//|<=|>=|==|!=|[+\-*/()^%<>,])'
@@ -458,6 +483,11 @@ class AdvancedMathParser:
         result = self.evaluate_expression(expression)
         self.cache[expression] = result
         return result
+    
+    def compile_function(self, expression):
+        def func(x):
+            return self.evaluate_expression(expression, {'x': x})
+        return func
 
 class FractionEngine:
     @staticmethod
@@ -690,12 +720,18 @@ if 'saved_graphs' not in st.session_state:
     st.session_state.saved_graphs = []
 
 def save_history(operation, result, details=""):
+    if 'calc_history' not in st.session_state:
+        st.session_state.calc_history = []
+    
     st.session_state.calc_history.append({
         'time': datetime.now().strftime("%H:%M:%S"),
         'operation': operation,
-        'result': result,
+        'result': str(result),
         'details': details
     })
+    
+    if len(st.session_state.calc_history) > 50:
+        st.session_state.calc_history = st.session_state.calc_history[-50:]
 
 def export_data():
     session_data = {
@@ -764,10 +800,24 @@ with st.sidebar:
         st.info("История вычислений пуста")
 
 tabs = st.tabs([
-    "🔢 Калькулятор", "Консоль", "📈 Графики", "🎲 Матрицы", 
+    "🔢 Калькулятор", "Консоль", "📈 Графики", "Матрицы", 
     "🔺 Векторы", "🌐 3D", "🔧 Системы", "♾️ Символы",
-    "⚡ Оптимизация", "📊 Анализ", "🧮 Дроби"
+    "⚡ Оптимизация", "📊 Анализ", "🧮 Дроби", "🎲 Генерация случайных данных",
+    "📈 Дифференциальные уравнения и численные методы", "Комплексный анализ"
 ])
+
+st.markdown("""
+<style>
+    .stTabs [data-baseweb="tab-list"] {
+        flex-wrap: wrap;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .stTabs [data-baseweb="tab"] {
+        display: inline-block;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 with tabs[0]:
     st.header("🔢 Расширенный калькулятор")
@@ -970,9 +1020,9 @@ with tabs[2]:
     with col2:
         x_max = st.number_input("x максимум", -50.0, 50.0, 10.0, key="xmax_2d")
     with col3:
-        points = st.slider("Количество точек", 100, 5000, 1000, key="points_2d")
+        points = st.slider("Количество точек", 100, 5000, 1000, key="points_2d_graph")
     with col4:
-        line_width = st.slider("Толщина линии", 1, 5, 2, key="linewidth_2d")
+        line_width = st.slider("Толщина линии", 1, 5, 2, key="line_width_2d")
 
     if st.button("📊 Построить график", type="primary", width='stretch'):
         try:
@@ -1475,7 +1525,7 @@ with tabs[5]:
         with col4:
             y_max_3d = st.number_input("y max", -10.0, 10.0, 5.0, key="ymax_3d")
         with col5:
-            resolution = st.slider("Разрешение", 20, 200, 50, key="res_3d")
+            resolution = st.slider("Разрешение", 20, 200, 50, key="res_3d_surface")
 
         if st.button("🌐 Построить 3D поверхность", type="primary", width='stretch'):
             try:
@@ -1540,7 +1590,7 @@ with tabs[5]:
         with col2:
             t_max = st.number_input("t max", 0.0, 100.0, 10.0, key="tmax_3d")
         with col3:
-            t_points = st.slider("Количество точек", 50, 2000, 500, key="tpoints_3d")
+            t_points = st.slider("Количество точек", 50, 2000, 500, key="tpoints_3d_curve")
 
         if st.button("Построить параметрическую кривую", type="primary", width='stretch'):
             try:
@@ -1598,8 +1648,8 @@ with tabs[5]:
         with col4:
             vf_y_max = st.number_input("y max", -5.0, 5.0, 2.0, key="vf_ymax")
 
-        grid_density = st.slider("Плотность сетки", 5, 30, 15, key="grid_density")
-        arrow_scale = st.slider("Масштаб стрелок", 0.1, 2.0, 0.3, key="arrow_scale")
+        grid_density = st.slider("Плотность сетки", 5, 30, 15, key="grid_density_field")
+        arrow_scale = st.slider("Масштаб стрелок", 0.1, 2.0, 0.3, key="arrow_scale_field")
 
         if st.button("Построить векторное поле", type="primary", width='stretch'):
             try:
@@ -2422,6 +2472,339 @@ with tabs[10]:
 
             except Exception as e:
                 st.error(f"Ошибка конвертации: {str(e)}")
+
+with tabs[11]:
+    st.header("🎲 Генерация случайных данных")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        dist_type = st.selectbox("Распределение", ["Нормальное", "Равномерное", "Экспоненциальное"], key="gen_dist")
+        n_samples = st.number_input("Количество samples", 10, 10000, 1000)
+        
+        if dist_type == "Нормальное":
+            gen_mu = st.number_input("Среднее", -10.0, 10.0, 0.0, key="gen_mu")
+            gen_sigma = st.number_input("Ст. отклонение", 0.1, 10.0, 1.0, key="gen_sigma")
+        elif dist_type == "Равномерное":
+            a = st.number_input("a (минимум)", -10.0, 10.0, 0.0)
+            b = st.number_input("b (максимум)", -10.0, 10.0, 1.0)
+        else:
+            scale = st.number_input("β (масштаб)", 0.1, 10.0, 1.0)
+    
+    with col2:
+        if st.button("Сгенерировать данные", key="gen_data"):
+            np.random.seed(42)
+            
+            if dist_type == "Нормальное":
+                data = np.random.normal(gen_mu, gen_sigma, n_samples)
+            elif dist_type == "Равномерное":
+                data = np.random.uniform(a, b, n_samples)
+            else:
+                data = np.random.exponential(scale, n_samples)
+            
+            st.session_state.generated_data = data
+            st.success(f"Сгенерировано {n_samples} samples")
+            
+            fig = px.histogram(data, nbins=50, title=f"Гистограмма {dist_type} распределения")
+            st.plotly_chart(fig, use_container_width=True)
+            
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("Среднее", f"{np.mean(data):.4f}")
+            col2.metric("Медиана", f"{np.median(data):.4f}")
+            col3.metric("Ст. отклонение", f"{np.std(data):.4f}")
+            col4.metric("Дисперсия", f"{np.var(data):.4f}")
+
+with tabs[12]:
+    st.header("📈 Дифференциальные уравнения и численные методы")
+    
+    ode_num_tabs = st.tabs(["Диффуры", "Численные методы", "Интегрирование"])
+    
+    with ode_num_tabs[0]:
+        st.subheader("ОДУ первого порядка: y' = f(x, y)")
+        
+        ode_input = st.text_input("Правая часть f(x, y)", "y - x", key="ode_func")
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            x0 = st.number_input("x₀", -10.0, 10.0, 0.0)
+            y0 = st.number_input("y₀", -10.0, 10.0, 1.0)
+        with col2:
+            x_end = st.number_input("Конечный x", -10.0, 20.0, 5.0)
+            n_points = st.slider("Точек", 100, 5000, 1000)
+        with col3:
+            method = st.selectbox("Метод", ["Рунге-Кутта 4", "Эйлера", "Эйлера-Коши"], key="ode_method")
+        
+        if st.button("Решить ОДУ", key="solve_ode"):
+            try:
+                def ode_func(x, y):
+                    return eval(ode_input, {"x": x, "y": y, "np": np, "math": math})
+                
+                x_span = np.linspace(x0, x_end, n_points)
+                
+                if method == "Рунге-Кутта 4":
+                    solution = integrate.solve_ivp(ode_func, [x0, x_end], [y0], t_eval=x_span, method='RK45')
+                elif method == "Эйлера":
+                    h = (x_end - x0) / n_points
+                    x_vals = [x0]
+                    y_vals = [y0]
+                    for i in range(n_points):
+                        x_new = x_vals[-1] + h
+                        y_new = y_vals[-1] + h * ode_func(x_vals[-1], y_vals[-1])
+                        x_vals.append(x_new)
+                        y_vals.append(y_new)
+                    solution = type('obj', (object,), {'t': np.array(x_vals), 'y': np.array([y_vals])})
+                else:
+                    solution = integrate.solve_ivp(ode_func, [x0, x_end], [y0], t_eval=x_span)
+                
+                if solution.success:
+                    fig = go.Figure()
+                    fig.add_trace(go.Scatter(x=solution.t, y=solution.y[0], mode='lines', name='Решение'))
+                    fig.update_layout(title=f"Решение: y' = {ode_input}, y({x0}) = {y0}", 
+                                    xaxis_title="x", yaxis_title="y")
+                    st.plotly_chart(fig, use_container_width=True)
+                    
+                    st.subheader("Поле направлений")
+                    x = np.linspace(x0-1, x_end+1, 20)
+                    y = np.linspace(min(solution.y[0])-1, max(solution.y[0])+1, 20)
+                    X, Y = np.meshgrid(x, y)
+                    
+                    U = np.ones_like(X)
+                    V = np.array([[ode_func(x_val, y_val) for x_val, y_val in zip(x_row, y_row)] 
+                                for x_row, y_row in zip(X, Y)])
+                    
+                    norm = np.sqrt(U**2 + V**2)
+                    U = U / norm
+                    V = V / norm
+                    
+                    fig2 = go.Figure()
+                    fig2.add_trace(go.Scatter(x=solution.t, y=solution.y[0], mode='lines', name='Решение', line=dict(width=3)))
+                    fig2.add_trace(go.Cone(x=X.flatten(), y=Y.flatten(), u=U.flatten(), v=V.flatten(), 
+                                         colorscale='Blues', showscale=False, sizemode="absolute", sizeref=0.3))
+                    fig2.update_layout(title="Поле направлений и решение", xaxis_title="x", yaxis_title="y")
+                    st.plotly_chart(fig2, use_container_width=True)
+                    
+                else:
+                    st.error("Не удалось решить ОДУ")
+                    
+            except Exception as e:
+                st.error(f"Ошибка: {e}")
+
+    with ode_num_tabs[1]:
+        st.subheader("Интерполяция данных")
+        
+        st.write("Введите точки (x,y) через запятую, каждая точка с новой строки:")
+        points_input = st.text_area("Точки", "1, 1\n2, 4\n3, 9\n4, 16\n5, 25", height=150, key="interp_points")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            method = st.selectbox("Метод интерполяции", ["Линейная", "Полином Лагранжа", "Кубические сплайны"], key="interp_method")
+            n_interp = st.slider("Точек интерполяции", 10, 1000, 100, key="n_interp_points")
+        
+        with col2:
+            if st.button("Выполнить интерполяцию", key="do_interp"):
+                try:
+                    points = [line.split(',') for line in points_input.strip().split('\n') if line.strip()]
+                    x_data = np.array([float(p[0].strip()) for p in points])
+                    y_data = np.array([float(p[1].strip()) for p in points])
+                    
+                    x_interp = np.linspace(min(x_data), max(x_data), n_interp)
+                    
+                    if method == "Линейная":
+                        y_interp = np.interp(x_interp, x_data, y_data)
+                    elif method == "Полином Лагранжа":
+                        def lagrange_poly(x, x_data, y_data):
+                            total = 0
+                            n = len(x_data)
+                            for i in range(n):
+                                xi, yi = x_data[i], y_data[i]
+                                product = 1
+                                for j in range(n):
+                                    if i != j:
+                                        product *= (x - x_data[j]) / (xi - x_data[j])
+                                total += yi * product
+                            return total
+                        y_interp = [lagrange_poly(xi, x_data, y_data) for xi in x_interp]
+                    else:
+                        from scipy.interpolate import CubicSpline
+                        cs = CubicSpline(x_data, y_data)
+                        y_interp = cs(x_interp)
+                    
+                    fig = go.Figure()
+                    fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', name='Исходные точки', marker=dict(size=10)))
+                    fig.add_trace(go.Scatter(x=x_interp, y=y_interp, mode='lines', name=f'Интерполяция ({method})', line=dict(width=3)))
+                    fig.update_layout(title=f"Интерполяция: {method}", xaxis_title="x", yaxis_title="y")
+                    st.plotly_chart(fig, use_container_width=True)
+                    
+                except Exception as e:
+                    st.error(f"Ошибка: {e}")
+
+with ode_num_tabs[2]:
+    st.subheader("📊 Численное интегрирование")
+    
+    int_func = st.text_input("Функция для интегрирования", "sin(x)", key="num_int_func")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        a_int = st.number_input("Нижний предел", -10.0, 10.0, 0.0, key="num_a")
+        b_int = st.number_input("Верхний предел", -10.0, 10.0, np.pi, key="num_b")
+    
+    with col2:
+        method_int = st.selectbox("Метод интегрирования", 
+                                ["Квадратура", "Метод трапеций", "Метод Симпсона", "Монте-Карло"], 
+                                key="int_method")
+        n_segments = st.slider("Сегментов", 10, 10000, 1000, key="n_segments_int")
+        
+    if st.button("Вычислить интеграл", key="calc_num_int"):
+        try:
+            compiled_func = parser.compile_function(int_func)
+            func = lambda x: float(compiled_func(x).real)
+            
+            if method_int == "Квадратура":
+                result, error = integrate.quad(func, a_int, b_int)
+                st.success(f"**Результат:** {result:.8f}")
+                st.info(f"**Оценка погрешности:** {error:.2e}")
+                
+            elif method_int == "Метод трапеций":
+                x_vals = np.linspace(a_int, b_int, n_segments + 1)
+                y_vals = np.array([func(x) for x in x_vals])
+                result = integrate.trapz(y_vals, x_vals)
+                st.success(f"**Результат (трапеции):** {result:.8f}")
+                
+            elif method_int == "Метод Симпсона":
+                x_vals = np.linspace(a_int, b_int, n_segments + 1)
+                y_vals = np.array([func(x) for x in x_vals])
+                result = integrate.simpson(y_vals, x_vals)
+                st.success(f"**Результат (Симпсон):** {result:.8f}")
+                
+            else:
+                x_rand = np.random.uniform(a_int, b_int, n_segments)
+                y_rand = np.array([func(x) for x in x_rand])
+                result = (b_int - a_int) * np.mean(y_rand)
+                st.success(f"**Результат (Монте-Карло):** {result:.8f}")
+            
+            x_plot = np.linspace(a_int, b_int, 1000)
+            y_plot = np.array([func(x) for x in x_plot])
+            
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=x_plot, y=y_plot, mode='lines', name=f'f(x) = {int_func}', fill='tozeroy'))
+            fig.update_layout(title=f"Интеграл ∫{int_func}dx от {a_int} до {b_int} = {result:.6f}", 
+                            xaxis_title="x", yaxis_title="f(x)")
+            st.plotly_chart(fig, use_container_width=True)
+            
+        except Exception as e:
+            st.error(f"Ошибка: {e}")
+
+with tabs[13]:
+    st.header("Комплексный анализ")
+    
+    complex_tabs = st.tabs(["Визуализация", "Вычеты"])
+    
+with complex_tabs[0]:
+    st.subheader("Визуализация комплексных функций")
+    
+    complex_func = st.text_input("Комплексная функция f(z)", "z**2", key="complex_func")
+    st.caption("💡 Используйте z как комплексную переменную")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        re_min = st.number_input("Re(z) min", -5.0, 5.0, -2.0)
+        re_max = st.number_input("Re(z) max", -5.0, 5.0, 2.0)
+    with col2:
+        im_min = st.number_input("Im(z) min", -5.0, 5.0, -2.0)
+        im_max = st.number_input("Im(z) max", -5.0, 5.0, 2.0)
+    
+    resolution = st.slider("Разрешение", 50, 500, 100)
+    plot_type = st.selectbox("Тип визуализации", ["Модуль и фаза", "Re и Im", "Домен и образ"], key="complex_plot")
+    
+    if st.button("Визуализировать", key="plot_complex"):
+        try:
+            x = np.linspace(re_min, re_max, resolution)
+            y = np.linspace(im_min, im_max, resolution)
+            X, Y = np.meshgrid(x, y)
+            Z = X + 1j * Y
+            
+            if complex_func == "z**2":
+                W = Z**2
+            elif complex_func == "exp(z)":
+                W = np.exp(Z)
+            elif complex_func == "sin(z)":
+                W = np.sin(Z)
+            elif complex_func == "cos(z)":
+                W = np.cos(Z)
+            elif complex_func == "log(z)":
+                W = np.log(Z)
+            elif complex_func == "1/z":
+                W = 1/Z
+            else:
+                W = eval(complex_func, {"z": Z, "np": np, "cmath": cmath})
+            
+            if plot_type == "Модуль и фаза":
+                fig = make_subplots(rows=1, cols=2, subplot_titles=("Модуль |f(z)|", "Фаза arg(f(z))"))
+                
+                fig.add_trace(go.Heatmap(x=x, y=y, z=np.abs(W), colorscale='Viridis'), 1, 1)
+                fig.add_trace(go.Heatmap(x=x, y=y, z=np.angle(W), colorscale='HSV', zmin=-np.pi, zmax=np.pi), 1, 2)
+                
+            elif plot_type == "Re и Im":
+                fig = make_subplots(rows=1, cols=2, subplot_titles=("Re(f(z))", "Im(f(z))"))
+                
+                fig.add_trace(go.Heatmap(x=x, y=y, z=np.real(W), colorscale='RdBu'), 1, 1)
+                fig.add_trace(go.Heatmap(x=x, y=y, z=np.imag(W), colorscale='RdBu'), 1, 2)
+                
+            else:
+                fig = make_subplots(rows=1, cols=2, subplot_titles=("Домен z", "Образ f(z)"))
+                
+                fig.add_trace(go.Heatmap(x=x, y=y, z=np.angle(Z), colorscale='HSV', 
+                                       zmin=-np.pi, zmax=np.pi), 1, 1)
+                fig.add_trace(go.Scatter(x=np.real(W).flatten(), y=np.imag(W).flatten(),
+                                       mode='markers',
+                                       marker=dict(size=2, color=np.angle(W).flatten(), 
+                                                 colorscale='HSV', 
+                                                 colorbar=dict(title='Фаза'))), 1, 2)
+            
+            fig.update_layout(height=500, title_text=f"Визуализация: f(z) = {complex_func}")
+            st.plotly_chart(fig, use_container_width=True)
+            
+        except Exception as e:
+            st.error(f"Ошибка: {e}")
+
+    with complex_tabs[1]:
+        st.subheader("Вычеты и особые точки")
+        
+        residue_func = st.text_input("Функция для анализа вычетов", "1/(z-1)", key="residue_func")
+        point = st.text_input("Точка для анализа", "1+0j", key="residue_point")
+        
+        if st.button("Найти вычет", key="find_residue"):
+            try:
+                z0 = complex(point)
+                
+                def residue_simple(func_str, z0, epsilon=1e-6):
+                    z = sp.Symbol('z')
+                    f_expr = sp.sympify(func_str.replace('^', '**'))
+                    
+                    try:
+                        residue_expr = (z - z0) * f_expr
+                        residue_val = sp.limit(residue_expr, z, z0)
+                        return complex(residue_val)
+                    except:
+                        theta = np.linspace(0, 2*np.pi, 1000)
+                        circle = z0 + epsilon * np.exp(1j * theta)
+                        
+                        f_lambda = parser.compile_function(residue_func.replace('z', 'x'))
+                        f_vals = f_lambda(circle)
+                        
+                        integral = np.trapz(f_vals * 1j * epsilon * np.exp(1j * theta), theta)
+                        return integral / (2*np.pi*1j)
+                
+                residue = residue_simple(residue_func, z0)
+                
+                st.success(f"**Вычет в точке z₀ = {z0}:** {residue:.6f}")
+                
+                if abs(residue) > 1e-10:
+                    st.info("**Тип точки:** Устранимая особая точка или полюс")
+                else:
+                    st.info("**Тип точки:** Существенно особая точка или регулярная")
+                    
+            except Exception as e:
+                st.error(f"Ошибка: {e}")
 
 st.markdown("---")
 st.markdown(
