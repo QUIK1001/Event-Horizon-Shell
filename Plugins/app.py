@@ -109,6 +109,117 @@ import cmath
 from fractions import Fraction
 import plotly.figure_factory as ff
 from math import gcd as math_gcd
+import time
+import streamlit as st
+import time
+import numpy as np
+
+import streamlit as st
+import time
+
+import streamlit as st
+import time
+import os
+
+def welcome_screen():
+    st.markdown("""
+    <style>
+    .welcome-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 400px;
+        text-align: center;
+        background: #10141B;
+        color: white;
+        padding: 2rem;
+        border: 2px solid #42506E;
+        border-radius: 20px;
+        margin: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+    }
+    
+    .welcome-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        animation: fadeIn 1s ease-in;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+        animation: fadeIn 1.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .feature-grid {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin: 1.5rem 0;
+    }
+    
+    .feature-item {
+        text-align: center;
+        animation: slideUp 0.5s ease-in-out;
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    </style>
+
+    <div class="welcome-container">
+        <div style='font-size: 3rem; margin-bottom: 1rem;'>🧮</div>
+        <div class="welcome-title">Математический калькулятор</div>
+        <div class="welcome-subtitle">by quik</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def initialize_app():
+    """Инициализация приложения с экраном приветствия"""
+    
+    welcome_container = st.empty()
+    
+    with welcome_container.container():
+        welcome_screen()
+    
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+    
+    modules = [
+        "Загрузка математического парсера...",
+        "Инициализация графического движка...", 
+        "Подготовка матричных операций...",
+        "Загрузка символьных вычислений...",
+        "Активация интерфейса..."
+    ]
+    
+    for i, module in enumerate(modules):
+        progress = (i + 1) * 20
+        progress_bar.progress(progress)
+        status_text.text(f"{module}")
+        time.sleep(0.3)
+    
+    progress_bar.progress(100)
+    status_text.text("Загрузка завершена!")
+    time.sleep(0.3)
+    status_text.text("Preparing the workspace...")
+    time.sleep(0.3)
+    
+    welcome_container.empty()
+    progress_bar.empty()
+    status_text.empty()
+
+initialize_app()
 
 class AdvancedMathParser:
     def __init__(self):
