@@ -2024,18 +2024,23 @@ class ModernFileOrganizerGUI:
             hours = uptime.seconds // 3600
             minutes = (uptime.seconds % 3600) // 60
             left_col.append(f"Время работы: {days}д {hours}ч {minutes}м")
-            
+
             right_col.append("Дисковое пространство")
             partitions = psutil.disk_partitions()
-            
+
             for partition in partitions:
                 try:
                     usage = psutil.disk_usage(partition.mountpoint)
                     device_name = partition.device.replace('\\', '').replace('/', '')
+                    
+                    used_percent = (usage.used / usage.total) * 100
+                    free_percent = (usage.free / usage.total) * 100
+                    
                     right_col.append(f"Диск {device_name}:")
                     right_col.append(f"  {partition.mountpoint}")
                     right_col.append(f"  {self.organizer._format_size(usage.used)} / {self.organizer._format_size(usage.total)}")
-                    right_col.append(f"  Свободно: {usage.percent}%")
+                    right_col.append(f"  Использовано: {used_percent:.1f}%")
+                    right_col.append(f"  Свободно: {free_percent:.1f}%")
                     right_col.append("")
                 except (PermissionError, OSError):
                     continue
@@ -3210,7 +3215,7 @@ Filer v2.0
                     settings = json.load(f)
                     
                 self.auto_load_var.set(settings.get('auto_load', True))
-                self.auto_stats_var.set(settings.get('auto_stats', True))
+                self.auto_stats_var.set(settings.get('auto_stats', False))
                 self.confirm_delete_var.set(settings.get('confirm_delete', True))
                 self.theme_var.set(settings.get('theme', 'dark'))
                 self.font_size_var.set(settings.get('font_size', 'normal'))
